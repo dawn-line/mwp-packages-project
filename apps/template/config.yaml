@@ -1,0 +1,23 @@
+application: 
+  name: 'node-template-service'
+  port: 3001
+  serverPath: 'templateServer'
+  profiles.active: 'dev,local'
+profiles.local:
+  disableConsole: false
+  logger:
+    level: 'verbose'
+  docs: 
+    name: '服务文档'
+    describe: '服务文档描述'
+    version: 1.4
+  loggerInterceptor: 
+    moreInfo: true
+  transformInterceptor: true
+  exceptionFilter:
+    stack:
+      response: true
+      logger: true
+  validationPipe:
+    transform: false
+    whitelist: false

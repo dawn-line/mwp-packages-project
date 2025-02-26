@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "monorepo": true,
+  "root": "apps/template",
+  "sourceRoot": "apps/template/src",
+  "compilerOptions": {
+    "webpack": true,
+    "watchAssets": true,
+    "deleteOutDir": false
+  },
+  "projects": {
+    "template": {
+      "type": "application",
+      "root": "apps/template",
+      "entryFile": "main",
+      "sourceRoot": "apps/template/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/template/tsconfig.json"
+      }
+    },
+    "nest-cloud": {
+      "type": "library",
+      "root": "libs/nest-cloud",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-cloud/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-cloud/tsconfig.json"
+      }
+    },
+    "nest-common": {
+      "type": "library",
+      "root": "libs/nest-common",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-common/tsconfig.json"
+      }
+    },
+    "nest-config": {
+      "type": "library",
+      "root": "libs/nest-config",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-config/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-config/tsconfig.json"
+      }
+    },
+    "cas-service": {
+      "type": "application",
+      "root": "apps/cas-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/cas-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cas-service/tsconfig.json"
+      }
+    },
+    "sdk": {
+      "type": "application",
+      "root": "apps/sdk",
+      "entryFile": "main",
+      "sourceRoot": "apps/sdk/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/sdk/tsconfig.json"
+      }
+    },
+    "cas-demo": {
+      "type": "application",
+      "root": "apps/cas-demo",
+      "entryFile": "main",
+      "sourceRoot": "apps/cas-demo/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cas-demo/tsconfig.json"
+      }
+    },
+    "nest-redis": {
+      "type": "library",
+      "root": "libs/nest-redis",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-redis/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-redis/tsconfig.json"
+      }
+    },
+    "nest-cas-client": {
+      "type": "library",
+      "root": "libs/nest-cas-client",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-cas-client/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-cas-client/tsconfig.json"
+      }
+    },
+    "node-pf-protal-service": {
+      "type": "application",
+      "root": "apps/node-pf-protal-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/node-pf-protal-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/node-pf-protal-service/tsconfig.app.json"
+      }
+    },
+    "node-pf-cas-session-service": {
+      "type": "application",
+      "root": "apps/node-pf-cas-session-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/node-pf-cas-session-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/node-pf-cas-session-service/tsconfig.app.json"
+      }
+    }
+  }
+}

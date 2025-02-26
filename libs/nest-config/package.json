@@ -1,0 +1,39 @@
+{
+  "name": "@cs/nest-config",
+  "version": "2.0.0-beat.0",
+  "description": "配置管理",
+  "author": "danielmlc <danielmlc@126.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prebuild": "rimraf lib",
+    "build": "tsc -p ./tsconfig.json",
+    "watch": "tsc -p ./tsconfig.json --watch"
+  },
+  "dependencies": {
+    "@cs/nest-common": "workspace:*",
+    "axios": "^0.27.2",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "nacos": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5"
+  },
+  
+  "peerDependencies": {
+    "@nestjs/common": "^10.4.8"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/common": {
+      "optional": false
+    }
+  }
+}

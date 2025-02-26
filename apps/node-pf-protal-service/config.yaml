@@ -1,0 +1,12 @@
+application: 
+  name: 'node-pf-protal-service'
+  port: 3004
+  serverPath: 'protalServer'
+  profiles.active: 'dev,local'
+profiles.local:
+  logger:
+    level: 'info'
+  docs: 
+    name: 'protal服务文档'
+    describe: ''
+    version: 1.4

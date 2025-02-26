@@ -1,0 +1,12 @@
+application: 
+  name: 'node-cas-demo-service'
+  port: 3003
+  serverPath: 'casDemoServer'
+  profiles.active: 'dev,local'
+profiles.local:
+  logger:
+    level: 'info'
+  docs: 
+    name: '服务文档1111111111'
+    describe: '服务文档描述'
+    version: 1.4

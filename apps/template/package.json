@@ -1,0 +1,23 @@
+{
+  "name": "node-template-service",
+  "version": "0.0.2",
+  "description": "",
+  "author": "",
+  "private": true,
+  "scripts": {
+    "cp:config": "cp  ./config.yaml ./dist",
+    "build": " nest build",
+    "start:dev": "npm run cp:config && nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node ./dist/main"
+  },
+  "dependencies": {
+    "@cs/nest-common": "workspace:*",
+    "@cs/nest-config": "workspace:*",
+    "@cs/nest-cloud": "workspace:*",
+    "@nestjs/core": "^10.4.8",
+    "@nestjs/common": "^10.4.8",
+    "@nestjs/platform-express": "^10.4.8"
+
+  }
+}

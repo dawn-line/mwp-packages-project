@@ -1,0 +1,57 @@
+{
+  "name": "@cs/nest-common",
+  "version": "3.0.0-beat.0",
+  "description": "",
+  "author": "danielmlc <danielmlc@126.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prebuild": "rimraf lib",
+    "build": "tsc -p ./tsconfig.json",
+    "watch": "tsc -p ./tsconfig.json --watch"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/express": "4.17.21",
+    "@types/lodash": "^4.14.178"
+  },
+  "dependencies": {
+    "@nestjs/schematics": "^10.2.3",
+    "@nestjs/swagger": "^8.0.7",
+    "@nestjs/typeorm": "10.0.2",
+    "axios": "^0.27.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
+    "crypto-js": "^4.2.0",
+    "express": "^4.18.1",
+    "lodash": "^4.17.21",
+    "nanoid": "^3.3.2",
+    "swagger-ui-express": "^5.0.1",
+    "typeorm": "0.3.20",
+    "winston": "^3.7.2",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.4.8",
+    "@nestjs/core": "^10.4.8",
+    "@nestjs/platform-express": "^10.4.8"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/core": {
+      "optional": false
+    },
+    "@nestjs/common": {
+      "optional": false
+    },
+    "@nestjs/platform-express": {
+      "optional": false
+    }
+  }
+}

@@ -1,0 +1,16 @@
+application: 
+  name: 'node-sdk-service'
+  port: 3000
+  serverPath: 'sdkServer'
+  profiles.active: 'dev,local'
+profiles.local:
+  logger:
+    level: 'info'
+  docs: 
+    name: '服务文档'
+    describe: '服务文档描述'
+    version: 1.4
+  httpExceptionFilter:
+    stack:
+      response: true
+      logger: true

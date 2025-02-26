@@ -1,0 +1,22 @@
+application: 
+  name: 'node-pf-cas-session-service'
+  port: 3005
+  serverPath: 'sessionServer'
+  profiles.active: 'dev,local'
+profiles.local:
+  disableConsole: false
+  logger:
+    level: 'verbose'
+  exceptionFilter:
+    stack:
+      response: true
+      logger: true
+  docs: 
+    name: 'cas认证session服务'
+    describe: 'cas认证session服务'
+    version: 1.0
+  redis:
+    host: '192.168.5.125'
+    port: 6379
+    db: 2
+    password: a1234567.

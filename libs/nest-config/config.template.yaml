@@ -1,0 +1,109 @@
+application:
+  # 应用程序的
+  name: 'node-cloud-sign-service'
+  # 应用程序的端口
+  port: '8080'
+  # 服务名称前缀
+  serverPath: 'cloudSignServer'
+  # 当前环境
+  env: 'dev' # 'dev' | 'test' | 'pre' | 'online'
+
+  # 跨域配置，默认不开启
+  cors:
+    origin: 'http://localhost:8088'
+    credentials: true
+    preflightContinue: false
+    methods: 
+      - 'GET'
+      - 'POST'
+      - 'PUT'
+      - 'DELETE'
+    allowedHeaders: 
+      - 'Content-Type'
+      - 'Authorization'
+
+
+  # 除开发环境以外服务端禁用console
+  disableConsole: false
+
+  # 日志级别
+  logger:
+    level: 'info' # 日志级别 info, error, warn, debug, verbose
+    timestamp: true # 是否开启时间戳
+    disableConsoleAtProd: false # 是否在生产环境禁用控制台日志
+    maxFileSize: '2m' # 单个日志文件最大大小
+    maxFiles: '30' # 日志文件最大数量
+    appLogName: 'web.log' # 应用日志名称
+    errorLogName: 'error.log' # 错误日志名称
+    dir: './logs' # 日志文件存储目
+    
+  loggerInterceptor:  # 是否开启日志拦截器
+    moreInfo: true # 是否记录更多信息
+  
+  transformInterceptor: true # 相应格式转化化拦截器
+
+  exceptionFilter:  # 异常过滤器
+    stack:  # 显示异常栈信息  （默认不开启）
+      response: false # 是否在控制台打印异常信息 （默认不开启）
+      logger: false # 是否在日志中打印异常信息 （默认不开启）
+  
+  validationPipe:
+    whitelist: true # 是否过滤掉不合法的属性
+    skipMissingProperties: true # 是否跳过缺失的属性
+    transform: true # 是否转换类型
+    
+  # 服务文档配置
+  docs: 
+    name: '服务文档'
+    describe: '服务文档描述'
+    version: 1.0
+
+
+  # 发布注册中心
+  naming: true
+  # rpc宣相关配置
+  rpc:
+  
+  # 解析请求体配置
+  bodyParser:
+    json:
+      limit: '5mb'
+
+  # mysql数据库的配置
+  mysql:
+    # 数据库code
+    metadata:
+      type: 'mysql'
+      host: ''
+      port: 3306
+      username: ''
+      password: ''
+      database: ''
+      synchronize: false
+      timeout: 10000
+      logging: false
+
+  # redis配置
+  redis:
+    host: ''
+    port: 6379
+    db: 10
+    password: ''
+  
+ 
+   
+  # 应用环境变量(本地开发环境多套配置) 优先级从左到右依次升高，注意 本地环境application下的配置优先级最高
+  profiles.active: 'dev,local'
+
+ 
+#当本地有多套配置时采用profiles.[配置标识]进行分组， 由profiles.active配置加载顺序(本地开发环境配置)
+profiles.local: 
+  cas:
+    # 认证中心站点地址
+    serverUrlPrefix: ''
+    # 验证服务地址
+    validateUrlUrlPrefix: ''
+    # 认证成功后携带票据返回的地址
+    serviceUrl: ''
+  
+

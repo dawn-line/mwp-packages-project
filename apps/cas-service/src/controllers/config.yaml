@@ -1,0 +1,23 @@
+application: 
+  name: 'node-pf-cas-service'
+  port: 3002
+  serverPath: 'cas'
+  loggerInterceptor: 
+    moreInfo: false
+  profiles.active: 'dev,local'
+profiles.local:
+  cas:
+    ticket: 
+      tgt: 43200
+      st: 300
+      pt: 300
+    casFrontPage: 'http://localhost:8080'
+    serviceRules:
+      - domain: '192.168.5.41:8080'
+        protocol: 'http'
+        pathPattern: '/*'
+      - domain: '192.168.5.41:3003'
+        protocol: 'http'
+      - domain: '192.168.5.41:3004'
+        protocol: 'http'
+    encryptionKey: 'ylkj'

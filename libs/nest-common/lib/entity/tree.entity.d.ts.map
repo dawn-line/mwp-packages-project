@@ -1,0 +1,1 @@
+{"version":3,"file":"tree.entity.d.ts","sourceRoot":"","sources":["../../src/entity/tree.entity.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAE,MAAM,eAAe,CAAC;AAC3C,8BAAsB,UAAW,SAAQ,UAAU;IAQjD,QAAQ,EAAE,MAAM,CAAC;IAQjB,MAAM,EAAE,MAAM,CAAC;IAQf,QAAQ,EAAE,MAAM,CAAC;IAOjB,KAAK,EAAE,MAAM,CAAC;IAOd,MAAM,EAAE,OAAO,CAAC;CACjB"}
