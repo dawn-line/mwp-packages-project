@@ -8,6 +8,6 @@ export declare class CasClientService {
     getLoginUrl(actualService?: string): string;
     getServiceTicket(tgt: string, service: string): Promise<string>;
     getSessionInfo(sessionId: string): Promise<any>;
-    setSessionInfo(sessionId: string, userInfo: object): Promise<void>;
+    setSessionInfo(sessionId: string, userInfo: Record<string, any>): Promise<void>;
 }
 //# sourceMappingURL=cas-client.service.d.ts.map

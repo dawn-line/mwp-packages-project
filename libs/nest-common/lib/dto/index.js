@@ -15,7 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./base.dto"), exports);
-__exportStar(require("./hasAction.dto"), exports);
+__exportStar(require("./hasEnable.dto"), exports);
 __exportStar(require("./hasPrimary.dto"), exports);
 __exportStar(require("./result.dto"), exports);
 __exportStar(require("./pageResult.dto"), exports);

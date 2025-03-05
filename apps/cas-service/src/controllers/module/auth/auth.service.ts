@@ -76,6 +76,7 @@ export class AuthService {
     password: string,
   ): Promise<User> {
     // const user = await this.userRepository.findOne({ where: { username } });
+    console.log(username, password);
     const user = getUserList().find((u) => u.userName === username);
     if (user && bcrypt.compareSync(password, user.password)) {
       return user;

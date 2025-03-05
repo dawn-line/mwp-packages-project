@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HasPrimaryFullTreeDto = exports.HasPrimaryFullDto = exports.HasPrimaryTreeDto = exports.HasPrimaryDto = void 0;
 const base_dto_1 = require("./base.dto");
 const tree_dto_1 = require("./tree.dto");
-const hasAction_dto_1 = require("./hasAction.dto");
+const hasEnable_dto_1 = require("./hasEnable.dto");
 const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
 class HasPrimaryDto extends base_dto_1.BaseDto {
@@ -31,7 +31,7 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], HasPrimaryTreeDto.prototype, "id", void 0);
-class HasPrimaryFullDto extends hasAction_dto_1.HasActionDto {
+class HasPrimaryFullDto extends hasEnable_dto_1.HasEnableDto {
 }
 exports.HasPrimaryFullDto = HasPrimaryFullDto;
 __decorate([
@@ -39,7 +39,7 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], HasPrimaryFullDto.prototype, "id", void 0);
-class HasPrimaryFullTreeDto extends hasAction_dto_1.HasActionTreeDto {
+class HasPrimaryFullTreeDto extends hasEnable_dto_1.HasEnableTreeDto {
 }
 exports.HasPrimaryFullTreeDto = HasPrimaryFullTreeDto;
 __decorate([

@@ -1,6 +1,6 @@
 import { BaseEntity } from './base.entity';
 import { TreeEntity } from './tree.entity';
-import { HasActionEntity, HasActionTreeEntity } from './hasAction.entity';
+import { HasActionEntity, HasActionTreeEntity } from './hasEnable.entity';
 export declare abstract class HasOnlyPrimaryEntity {
     id: string;
 }

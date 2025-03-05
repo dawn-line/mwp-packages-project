@@ -1,13 +1,9 @@
-import { OrderByCondition } from 'typeorm';
-export declare class QueryConditionInput {
+export interface QueryConditionInput {
+    tableName: string;
     select?: string[];
-    conditionLambda: string;
-    conditionValue: object;
-    orderBy?: OrderByCondition;
-    tableName?: string;
-    groupBy?: string;
-    havingLambda?: string;
-    havingValue?: object;
+    conditionLambda?: string;
+    conditionValue?: Record<string, any>;
+    orderBy?: Record<string, 'ASC' | 'DESC'>;
     skip?: number;
     take?: number;
 }

@@ -1,24 +1,9 @@
-import { OrderByCondition } from 'typeorm';
-import { IsString, IsInt, IsArray, IsObject } from 'class-validator';
-export class QueryConditionInput {
-  @IsArray()
+export interface QueryConditionInput {
+  tableName: string;
   select?: string[];
-  @IsString()
-  conditionLambda: string;
-  @IsObject()
-  conditionValue: object;
-
-  orderBy?: OrderByCondition;
-  @IsString()
-  tableName?: string;
-  @IsString()
-  groupBy?: string;
-  @IsString()
-  havingLambda?: string;
-  @IsObject()
-  havingValue?: object;
-  @IsInt()
+  conditionLambda?: string;
+  conditionValue?: Record<string, any>;
+  orderBy?: Record<string, 'ASC' | 'DESC'>;
   skip?: number;
-  @IsInt()
   take?: number;
 }

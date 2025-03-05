@@ -8,16 +8,6 @@ export class SdkController {
   @Get()
   async getHello(): Promise<any> {
     console.log('进入控制器:SDK');
-    const res = await this.rpcHttpService.get(
-      {
-        serviceName: 'node-cas-service',
-      },
-      '/casServer/',
-      {
-        timeout: 6000,
-      },
-    );
-    return res;
   }
 
   @Get('getAi')

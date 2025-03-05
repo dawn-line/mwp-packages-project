@@ -1,6 +1,4 @@
-import { IsInt } from 'class-validator';
-export class PageResult<T> {
-  @IsInt()
-  count: number;
+export interface PageResult<T> {
   result: T;
+  count: number;
 }

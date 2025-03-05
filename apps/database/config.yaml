@@ -1,0 +1,37 @@
+application: 
+  name: 'node-database-service'
+  port: 3023
+  serverPath: 'ormServer'
+  profiles.active: 'dev,local'
+profiles.local:
+  logger:
+    level: 'info'
+  docs: 
+    name: 'orm方法测试服务'
+    describe: 'orm方法测试服务'
+    version: 1.4
+  httpExceptionFilter:
+    stack:
+      response: true
+      logger: true
+  mysql:
+    test:
+      type: 'mysql'
+      host: '192.168.5.125'
+      port: 3306
+      username: 'root'
+      password: 'a1234567.'
+      database: 'test'
+      synchronize: true
+      timeout: 10000
+      logging: true
+    test1:
+      type: 'mysql'
+      host: '192.168.5.125'
+      port: 3306
+      username: 'root'
+      password: 'a1234567.'
+      database: 'test1'
+      synchronize: true
+      timeout: 10000
+      logging: true

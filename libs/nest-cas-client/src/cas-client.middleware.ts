@@ -1,13 +1,9 @@
 import { Injectable, NestMiddleware, Inject } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import { User } from '@cs/nest-common';
 import { CasClientService } from './cas-client.service';
 import { CasOptions } from './cas-options.interface';
 import { CAS_CLIENT_MODULE_OPTIONS } from './cas-client.constants';
-interface User {
-  // 根据您的实际用户数据结构定义属性
-  userId?: string;
-  [key: string]: any;
-}
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -19,7 +15,7 @@ declare global {
 }
 
 @Injectable()
-export class StaticAuthMiddleware implements NestMiddleware {
+export class CasClientMiddleware implements NestMiddleware {
   constructor(
     @Inject(CAS_CLIENT_MODULE_OPTIONS)
     private readonly options: CasOptions,
@@ -95,9 +91,10 @@ export class StaticAuthMiddleware implements NestMiddleware {
   ) {
     // 1. 使用 TGT 获取 Service Ticket
     const st = await this.casClient.getServiceTicket(tgt, fullUrl);
+    console.log('CAS Middleware - st:', st);
     // 2. 验证 ST 并获取用户信息
     const user = await this.casClient.validateTicket(st, fullUrl);
-
+    console.log('CAS Middleware - user:', user);
     // 3. 将用户信息存储到 session 中
     await this.setUserToSession(user, req);
 
@@ -123,9 +120,8 @@ export class StaticAuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     // const session = req.session;
     const fullUrl = this.getFullUrl(req);
-
     try {
-      // console.log('CAS Middleware - fullUrl:', fullUrl);
+      console.log('CAS Middleware - fullUrl:', fullUrl);
       // 1. 如果 session 中已存在用户信息，直接放行
       const casuid = req.cookies?.['__casuid'];
       if (casuid) {
@@ -134,7 +130,7 @@ export class StaticAuthMiddleware implements NestMiddleware {
           return next();
         }
       }
-
+      console.log('CAS Middleware - no user in session');
       // 2. 检查 URL 中是否带有 ST 票据
       const ticket = req.query.ticket as string;
       // console.log('CAS Middleware - ticket:', ticket);
@@ -142,15 +138,15 @@ export class StaticAuthMiddleware implements NestMiddleware {
         await this.handleTicketValidation(ticket, fullUrl, req, res);
         return;
       }
-
+      console.log('CAS Middleware - no ticket in url');
       // 3. 检查 cookie 中是否有 TGT
       const tgt = req.cookies?.['__tgc'];
-      // console.log('CAS Middleware - __tgc:', tgt);
+      console.log('CAS Middleware - __tgc:', tgt);
       if (tgt) {
         await this.handleTgtValidation(tgt, fullUrl, req, res);
         return;
       }
-
+      console.log('CAS Middleware - no __tgc in cookie');
       // 4. 如果以上都不满足，则重定向到 CAS 登录页
       this.redirectToLogin(res, fullUrl);
     } catch (error) {

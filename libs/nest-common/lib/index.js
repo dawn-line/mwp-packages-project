@@ -17,10 +17,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./utils"), exports);
 __exportStar(require("./constants"), exports);
 __exportStar(require("./dto"), exports);
-__exportStar(require("./entity"), exports);
-__exportStar(require("./service"), exports);
 __exportStar(require("./logger"), exports);
 __exportStar(require("./http"), exports);
 __exportStar(require("./decorator"), exports);
 __exportStar(require("./docs/setup-swagger"), exports);
+__exportStar(require("./interface/index"), exports);
 //# sourceMappingURL=index.js.map

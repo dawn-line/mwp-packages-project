@@ -1,6 +1,6 @@
 application: 
   name: 'node-sdk-service'
-  port: 3000
+  port: 30022
   serverPath: 'sdkServer'
   profiles.active: 'dev,local'
 profiles.local:
@@ -14,3 +14,4 @@ profiles.local:
     stack:
       response: true
       logger: true
+  

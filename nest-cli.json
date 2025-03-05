@@ -91,6 +91,15 @@
         "tsConfigPath": "libs/nest-cas-client/tsconfig.json"
       }
     },
+    "nest-orm-mysql": {
+      "type": "library",
+      "root": "libs/nest-orm-mysql",
+      "entryFile": "index",
+      "sourceRoot": "libs/nest-orm-mysql/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nest-orm-mysql/tsconfig.json"
+      }
+    },
     "node-pf-protal-service": {
       "type": "application",
       "root": "apps/node-pf-protal-service",

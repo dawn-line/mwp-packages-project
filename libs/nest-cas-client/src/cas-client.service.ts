@@ -1,5 +1,5 @@
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
-import { RpcClient } from '@cs/nest-cloud';
+import { RpcClient, getRPCResult } from '@cs/nest-cloud';
 import { CasOptions } from './cas-options.interface';
 import { CAS_CLIENT_MODULE_OPTIONS } from './cas-client.constants';
 interface ServiceResponse {
@@ -45,17 +45,17 @@ export class CasClientService {
           },
         },
       });
-      const serviceResponse = response.result
-        ?.serviceResponse as ServiceResponse;
-
-      if (!!response.result && serviceResponse?.authenticationSuccess?.user) {
+      const result = getRPCResult<{
+        serviceResponse: ServiceResponse;
+      }>(response)?.serviceResponse;
+      if (!!result) {
         return {
-          userId: serviceResponse.authenticationSuccess.user,
-          attributes: serviceResponse.authenticationSuccess.attributes,
+          userId: result.authenticationSuccess.user,
+          attributes: result.authenticationSuccess.attributes,
         };
       }
 
-      const failure = serviceResponse?.authenticationFailure;
+      const failure = result?.authenticationFailure;
       throw new HttpException(
         failure?.description || 'Invalid ticket',
         HttpStatus.UNAUTHORIZED,
@@ -87,9 +87,7 @@ export class CasClientService {
         },
       },
     });
-    if (response && 'result' in response) {
-      return response.result;
-    }
+    return getRPCResult<string>(response);
     // 抛异常就跳转到登录页面
     throw new HttpException(
       'Failed to get service ticket',
@@ -113,7 +111,10 @@ export class CasClientService {
     return response;
   }
 
-  async setSessionInfo(sessionId: string, userInfo: object): Promise<void> {
+  async setSessionInfo(
+    sessionId: string,
+    userInfo: Record<string, any>,
+  ): Promise<void> {
     await this.rpcClient.call({
       rpcConfig: {
         serviceName: 'node-pf-cas-session-service', // 目标服务名称

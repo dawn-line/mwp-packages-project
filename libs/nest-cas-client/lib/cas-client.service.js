@@ -39,15 +39,14 @@ let CasClientService = class CasClientService {
                     },
                 },
             });
-            const serviceResponse = response.result
-                ?.serviceResponse;
-            if (!!response.result && serviceResponse?.authenticationSuccess?.user) {
+            const result = (0, nest_cloud_1.getRPCResult)(response)?.serviceResponse;
+            if (!!result) {
                 return {
-                    userId: serviceResponse.authenticationSuccess.user,
-                    attributes: serviceResponse.authenticationSuccess.attributes,
+                    userId: result.authenticationSuccess.user,
+                    attributes: result.authenticationSuccess.attributes,
                 };
             }
-            const failure = serviceResponse?.authenticationFailure;
+            const failure = result?.authenticationFailure;
             throw new common_1.HttpException(failure?.description || 'Invalid ticket', common_1.HttpStatus.UNAUTHORIZED);
         }
         catch (error) {
@@ -73,9 +72,7 @@ let CasClientService = class CasClientService {
                 },
             },
         });
-        if (response && 'result' in response) {
-            return response.result;
-        }
+        return (0, nest_cloud_1.getRPCResult)(response);
         throw new common_1.HttpException('Failed to get service ticket', common_1.HttpStatus.UNAUTHORIZED);
     }
     async getSessionInfo(sessionId) {

@@ -1,7 +1,7 @@
 import { SetMetadata } from '@nestjs/common';
 
+export const SKIP_TRANSFORM_INTERCEPTOR = 'SKIP_TRANSFORM_INTERCEPTOR';
 
-export const SKIP_TRANSFORM_INTERCEPTOR = 'SKIP_TRANSFORM_INTERCEPTOR'; 
-
-export const skipTransformInterceptor = () => // 跳过转化拦截器
+export const skipTransformInterceptor = () =>
+  // 跳过转化拦截器
   SetMetadata(SKIP_TRANSFORM_INTERCEPTOR, true);

@@ -99,9 +99,11 @@ exports.CommonUtil = {
         if (records && records.length > 0) {
             const record = records[0];
             for (const field in record) {
-                const prop = field.toLowerCase();
-                if (field !== prop) {
-                    mapFields[field] = prop;
+                const camelCaseField = field
+                    .toLowerCase()
+                    .replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+                if (field !== camelCaseField) {
+                    mapFields[field] = camelCaseField;
                 }
             }
             records.forEach((record) => {

@@ -161,14 +161,14 @@ export class RpcController {
     }
   }
 
-  @Get('/methods')
-  @ApiOperation({
-    summary: 'RPC 方法列表',
-    description: '获取已注册的RPC方法列表',
-  })
-  getRegisteredMethods(): string[] {
-    return this.rpcRegistry.getMethods();
-  }
+  // @Get('/methods')
+  // @ApiOperation({
+  //   summary: 'RPC 方法列表',
+  //   description: '获取已注册的RPC方法列表',
+  // })
+  // getRegisteredMethods(): string[] {
+  //   return this.rpcRegistry.getMethods();
+  // }
 
   @Get()
   @ApiOperation({

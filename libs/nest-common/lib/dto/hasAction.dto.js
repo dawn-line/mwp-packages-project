@@ -9,30 +9,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HasActionTreeDto = exports.HasActionDto = void 0;
+exports.HasEnableTreeDto = exports.HasEnableDto = void 0;
 const base_dto_1 = require("./base.dto");
 const tree_dto_1 = require("./tree.dto");
 const class_validator_1 = require("class-validator");
-class HasActionDto extends base_dto_1.BaseDto {
+class HasEnableDto extends base_dto_1.BaseDto {
 }
-exports.HasActionDto = HasActionDto;
+exports.HasEnableDto = HasEnableDto;
 __decorate([
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
-], HasActionDto.prototype, "sortCode", void 0);
+], HasEnableDto.prototype, "sortCode", void 0);
 __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], HasActionDto.prototype, "isActive", void 0);
-class HasActionTreeDto extends tree_dto_1.TreeDto {
+], HasEnableDto.prototype, "isEnable", void 0);
+class HasEnableTreeDto extends tree_dto_1.TreeDto {
 }
-exports.HasActionTreeDto = HasActionTreeDto;
+exports.HasEnableTreeDto = HasEnableTreeDto;
 __decorate([
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
-], HasActionTreeDto.prototype, "sortCode", void 0);
+], HasEnableTreeDto.prototype, "sortCode", void 0);
 __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
-], HasActionTreeDto.prototype, "isActive", void 0);
+], HasEnableTreeDto.prototype, "isEnable", void 0);
 //# sourceMappingURL=hasAction.dto.js.map

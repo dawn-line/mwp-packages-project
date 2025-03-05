@@ -71,7 +71,6 @@ export class CSRequest {
    
       return res;
     }, async function (err: any) {
-      console.log(2222, err);
       // 判断返回值如果是302，跳转到登录页
       if (err.response.data && err.response.data.code === 302) {
         window.open(err.response.data.redirectUrl, '_self');

@@ -1,11 +1,11 @@
 import { BaseDto } from './base.dto';
 import { TreeDto } from './tree.dto';
-export declare abstract class HasActionDto extends BaseDto {
+export declare abstract class HasEnableDto extends BaseDto {
     sortCode?: number;
-    isActive?: boolean;
+    isEnable?: boolean;
 }
-export declare abstract class HasActionTreeDto extends TreeDto {
+export declare abstract class HasEnableTreeDto extends TreeDto {
     sortCode?: number;
-    isActive?: boolean;
+    isEnable?: boolean;
 }
 //# sourceMappingURL=hasAction.dto.d.ts.map

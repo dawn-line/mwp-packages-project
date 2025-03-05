@@ -129,9 +129,6 @@ let RpcController = class RpcController {
             });
         }
     }
-    getRegisteredMethods() {
-        return this.rpcRegistry.getMethods();
-    }
     getServicesInfo() {
         const services = this.rpcRegistry.getServicesInfo();
         return services;
@@ -158,16 +155,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], RpcController.prototype, "handleRpcRequest", null);
-__decorate([
-    (0, common_1.Get)('/methods'),
-    (0, swagger_1.ApiOperation)({
-        summary: 'RPC 方法列表',
-        description: '获取已注册的RPC方法列表',
-    }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Array)
-], RpcController.prototype, "getRegisteredMethods", null);
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({

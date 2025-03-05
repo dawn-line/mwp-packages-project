@@ -22,4 +22,5 @@ __exportStar(require("./rpc.registry"), exports);
 __exportStar(require("./rpc.client"), exports);
 __exportStar(require("./rpc.errors"), exports);
 __exportStar(require("./json-rpc/types"), exports);
+__exportStar(require("./json-rpc/rpc-helpers"), exports);
 //# sourceMappingURL=index.js.map

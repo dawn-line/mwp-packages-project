@@ -6,7 +6,6 @@ export declare class RpcController {
     constructor(rpcRegistry: RpcRegistry);
     handleRpcRequest(request: JsonRpcRequest): Promise<JsonRpcResponse | void>;
     private handleSingleRequest;
-    getRegisteredMethods(): string[];
     getServicesInfo(): RpcServiceInfo[];
 }
 //# sourceMappingURL=rpc.controller.d.ts.map

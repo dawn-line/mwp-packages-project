@@ -12,11 +12,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StaticAuthMiddleware = void 0;
+exports.CasClientMiddleware = void 0;
 const common_1 = require("@nestjs/common");
 const cas_client_service_1 = require("./cas-client.service");
 const cas_client_constants_1 = require("./cas-client.constants");
-let StaticAuthMiddleware = class StaticAuthMiddleware {
+let CasClientMiddleware = class CasClientMiddleware {
     constructor(options, casClient) {
         this.options = options;
         this.casClient = casClient;
@@ -60,7 +60,9 @@ let StaticAuthMiddleware = class StaticAuthMiddleware {
     }
     async handleTgtValidation(tgt, fullUrl, req, res) {
         const st = await this.casClient.getServiceTicket(tgt, fullUrl);
+        console.log('CAS Middleware - st:', st);
         const user = await this.casClient.validateTicket(st, fullUrl);
+        console.log('CAS Middleware - user:', user);
         await this.setUserToSession(user, req);
         this.setSessionCookie(res, user);
         const cleanUrl = this.removeTicketFromUrl(fullUrl);
@@ -74,6 +76,7 @@ let StaticAuthMiddleware = class StaticAuthMiddleware {
     async use(req, res, next) {
         const fullUrl = this.getFullUrl(req);
         try {
+            console.log('CAS Middleware - fullUrl:', fullUrl);
             const casuid = req.cookies?.['__casuid'];
             if (casuid) {
                 const isLogin = await this.isUserLoggedIn(casuid);
@@ -81,16 +84,20 @@ let StaticAuthMiddleware = class StaticAuthMiddleware {
                     return next();
                 }
             }
+            console.log('CAS Middleware - no user in session');
             const ticket = req.query.ticket;
             if (ticket) {
                 await this.handleTicketValidation(ticket, fullUrl, req, res);
                 return;
             }
+            console.log('CAS Middleware - no ticket in url');
             const tgt = req.cookies?.['__tgc'];
+            console.log('CAS Middleware - __tgc:', tgt);
             if (tgt) {
                 await this.handleTgtValidation(tgt, fullUrl, req, res);
                 return;
             }
+            console.log('CAS Middleware - no __tgc in cookie');
             this.redirectToLogin(res, fullUrl);
         }
         catch (error) {
@@ -98,10 +105,10 @@ let StaticAuthMiddleware = class StaticAuthMiddleware {
         }
     }
 };
-exports.StaticAuthMiddleware = StaticAuthMiddleware;
-exports.StaticAuthMiddleware = StaticAuthMiddleware = __decorate([
+exports.CasClientMiddleware = CasClientMiddleware;
+exports.CasClientMiddleware = CasClientMiddleware = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(cas_client_constants_1.CAS_CLIENT_MODULE_OPTIONS)),
     __metadata("design:paramtypes", [Object, cas_client_service_1.CasClientService])
-], StaticAuthMiddleware);
+], CasClientMiddleware);
 //# sourceMappingURL=cas-client.middleware.js.map

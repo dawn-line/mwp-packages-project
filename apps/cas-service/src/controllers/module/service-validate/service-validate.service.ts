@@ -164,7 +164,7 @@ export class ServiceValidateService {
     data: {
       user: bigint;
       attributes: any;
-      pgtIou?: string;
+      // pgtIou?: string;
     },
     format: string,
   ) {
@@ -174,7 +174,7 @@ export class ServiceValidateService {
           authenticationSuccess: {
             user: data.user,
             attributes: data.attributes,
-            ...(data.pgtIou && { proxyGrantingTicket: data.pgtIou }),
+            // ...(data.pgtIou && { proxyGrantingTicket: data.pgtIou }),
           },
         },
       };

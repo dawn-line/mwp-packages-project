@@ -90,16 +90,23 @@ export const CommonUtil = {
   },
 
   transRecords(records: any[]): any[] {
-    const mapFields: MapFields = {};
+    const mapFields: Record<string, string> = {};
+
     if (records && records.length > 0) {
       const record = records[0];
       for (const field in record) {
-        const prop = field.toLowerCase();
-        if (field !== prop) {
-          mapFields[field] = prop;
+        // 转换为小驼峰格式
+        const camelCaseField = field
+          .toLowerCase()
+          .replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+
+        // 如果原始字段名和转换后的字段名不同，则添加到映射中
+        if (field !== camelCaseField) {
+          mapFields[field] = camelCaseField;
         }
       }
 
+      // 应用转换到所有记录
       records.forEach((record) => {
         for (const field in mapFields) {
           record[mapFields[field]] = record[field];
@@ -107,6 +114,8 @@ export const CommonUtil = {
         }
       });
     }
+
+    // console.log('Records after transformation:', records);
     return records;
   },
 };
