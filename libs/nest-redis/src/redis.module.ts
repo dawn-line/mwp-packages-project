@@ -106,6 +106,7 @@ export class RedisModule implements OnModuleDestroy {
     };
   }
 
+  // 当模块销毁时调用
   onModuleDestroy() {
     // on destroy
   }

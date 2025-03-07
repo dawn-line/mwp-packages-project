@@ -8,8 +8,7 @@ import { Role } from './role.entity';
 export class RoleService extends SingleService<Role> {
   constructor(
     @InjectRepository(Role, 'test1')
-    private roleRepository: Repository<Role>,
-    // private dataSource: DataSource,
+    private readonly roleRepository: Repository<Role>,
   ) {
     super(roleRepository);
   }

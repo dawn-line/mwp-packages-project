@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from '@cs/nest-typeorm';
-import { ConfigService } from '@cs/nest-config';
+import { ConfigService, ConfigModule } from '@cs/nest-config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ShareModule } from './share.moudle';
@@ -11,13 +11,38 @@ import { User } from './modules/user/user.entity';
 import { Role } from './modules/role/role.entity';
 @Module({
   imports: [
+    ShareModule,
+    RoleModule,
+    UserModule,
     // DatabaseModule.forRootAsync({
     //   inject: [ConfigService],
-    //   useFactory: async (config: ConfigService) => {
-    //     console.log(config.get('mysql'));
-    //     return {
-    //       connections: config.get('mysql'),
-    //     };
+    //   useFactory: async (configService: ConfigService) => {
+    //     const mysqlConfig = configService.get('mysql');
+    //     return mysqlConfig.test;
+    //   },
+    // }),
+    // DatabaseModule.forRoot({
+    //   test: {
+    //     name: 'test',
+    //     type: 'mysql',
+    //     host: '192.168.5.125',
+    //     port: 3306,
+    //     username: 'root',
+    //     password: 'a1234567.',
+    //     database: 'test',
+    //     synchronize: true,
+    //     logging: true,
+    //   },
+    //   test1: {
+    //     name: 'test1',
+    //     type: 'mysql',
+    //     host: '192.168.5.125',
+    //     port: 3306,
+    //     username: 'root',
+    //     password: 'a1234567.',
+    //     database: 'test1',
+    //     synchronize: true,
+    //     logging: true,
     //   },
     // }),
     // TypeOrmModule.forRootAsync({
@@ -42,9 +67,6 @@ import { Role } from './modules/role/role.entity';
     //     };
     //   },
     // }),
-    ShareModule,
-    RoleModule,
-    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

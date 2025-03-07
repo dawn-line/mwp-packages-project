@@ -1,329 +1,90 @@
-## @cs/nest-common
+# @cs/nest-common
 
-### 服务方法
 
-#### singleService 标准api说明
 
-- getOneBase 根据实体查询符合条件的单个结果集
+## 日志模块
 
-> 该方法根据传递的实体对象的属性拼接查询对象，主要用于真实字段匹配查询单个对象，如果要查询多种条件、分页、聚合等需求，应该使用`getManyBase`方法。
 
-  参数：
-  ```js
-    entitiesDto: any,  // 查询条件的实体对象
-  ```
+### 配置
 
-  返回值：
-
-  ```json
-  {
-      "code": 200,
-      "status": "success",
-      "message": "",
-      "result": {
-        ... // 实体对象
-      }
-  }
-  ```
-
-- getManyBase 根据条件获取单条或多条结果集包含分页。
-
-> 该方法按照`QueryConditionInput`实体的条件属性对结果集进行查询；
-
-- 参数实体：
-```js
-export class QueryConditionInput {
-  tableName?: string;  // 表别名 eg: "tableName":"user"
-  select?: string[];  // 如果传入了tablename，在select属性中必须以前缀方式访问 eg: "select":["user.id","user.userName"]  注意：属性名访问必须转化为小驼峰风格；
-  conditionLambda: string; //查询条件 eg："user.firstName = :firstName and userName like %:userName%" 注意：属性名访问必须转化为小驼峰风格；
-  conditionValue: object;  //查询条件的参数变量  eg：{ firstName: "Timber", userName: "mlc" }
-  orderBy?: OrderByCondition;  // 排序条件  eg:{"user_name":"asc","id":"asc"}  注意此处的属性为数据库字段格式，不是小驼峰格式。
-  skip?: number; // 跳过的条目数  该属性存在时会返回分页格式的结果
-  take?: number;  // 获取结果集的条目数  0为不限制
-}
-```
-- 返回值：
-```js
-{
-    "code": 201,
-    "status": "success",
-    "message": "",
-    "result": [
-      ... // 多组实体对象
-    ]
-}
-```
-当实体中包含skip属性时按分页方式返回结构如下：
-
-```js
-{
-    "code": 201,
-    "status": "success",
-    "message": "",
-    "result": {
-        "result": [
-            {
-                "id": "3kLxkUB_u65fDYC8mOR4w",
-                "roleName": "string"
-            },
-            {
-                "id": "B96Lhvy7vAZ_P5cgc5h9P",
-                "roleName": "string"
-            }
-        ],
-        "count": 11
-    }
-}
+```yaml
+logger:
+  level: 'info' # 日志级别 info, error, warn, debug, verbose
+  timestamp: true # 是否开启时间戳
+  disableConsoleAtProd: false # 是否在生产环境禁用控制台日志
+  maxFileSize: '2m' # 单个日志文件最大大小
+  maxFiles: '30' # 日志文件最大数量
+  appLogName: 'web.log' # 应用日志名称
+  errorLogName: 'error.log' # 错误日志名称
+  dir: './logs' # 日志文件存储目录
 ```
 
-调用示例：
+### 使用
 
-- 查询单表返回多条结果集传参示例
-
-```json
-{
-    "select": [
-        "roles.id",
-        "roles.roleName"
-    ],
-    "tableName": "roles",
-    "conditionLambda": "roles.roleName = :roleName" ,
-    "conditionValue": {
-        "roleName":"string"
-    },
-    "take":10
-}
-````
-
-- 查询单表返回多条分页结构的结果集传参示例
-
-```json
-{
-    "select": [
-        "roles.id",
-        "roles.roleName"
-    ],
-    "tableName": "roles",
-    "conditionLambda": "roles.roleName = :roleName" ,
-    "conditionValue": {
-        "roleName":"string"
-    },
-    "skip": 0,
-    "take":2
-}
-````
-- createOneBase 添加单条实体
-
-> 该方法根据对单挑实体对象进行添加操作，要求传递的对象必须会包含主键数据（id主键会自动生成，其它主键需要提前生成），会根据主键信息进行实体上的属性进行写入，要注意 如果传递的主键信息存在会进行更新操作。
-
-  参数：
-  ```js
-    entitiesDto: any,  // 添加实体对象
-    ctxParams: any = {}, // 系统上下文，系统会默认传入，可以改变
-    options: SaveOptions = { 
-                  reload: false,   // 更新或插入完成后是否返回插入实体信息
-                  transaction: false, // 开启事务
-                  }, 
-  ```
-
-  返回值：
-
-  ```json
-{
-    "code": 201,
-    "status": "success",
-    "message": "",
-    "result": {
-      ... // 实体对象
-    }
-}
-  ```
+> logger 服务注入方式,logger模块在nest-cloud中已经全局注册，可以直接注入使用 
 
 
-- updateOneBase 更新单条实体
+```typescript
+import { LoggerService } from '@cs/nest-common';
 
-> 该方法根据对单挑实体对象进行更新操作，要求传递的对象必须会包含主键数据，会根据主键信息进行实体上的属性完全更新（所以不需要更新的属性不要带在实体上），要注意 如果传递的主键信息不存在会进行插入操作。
+@Injectable()
+export class AppService {
+  constructor(private readonly logger: LoggerService) {}
+} 
+``` 
 
-  参数：
-  ```js
-    entitiesDto: any,  // 编辑实体对象
-    ctxParams: any = {}, // 系统上下文，系统会默认传入，可以改变
-    options: SaveOptions = { 
-                  reload: false,   // 更新或插入完成后是否返回插入实体信息
-                  transaction: false, // 开启事务
-                  }, 
-  ```
-
-  返回值：
-
-  ```json
-{
-    "code": 200,
-    "status": "success",
-    "message": "",
-    "result": {
-      ... // 实体对象
-    }
-}
-  ```
+> 使用logger.service 提供的日志方法
 
 
-- updateByCondition 按条件更新对象
+> 方法说明
 
-> 该方法根据根据传递的对象条件以及更新对象对数据进行更新操作（使用时要注意传入的条件对象要合理，否则会大量更新对应数据对象）。
+```typescript
+// 接受消息和可选的上下文
+log(message: any, context?: string): void;
 
-  参数：
-  ```js
-    entityDto: any, // 要更新的实体对象
-    findEntityDto: any,  // 更新的条件对象
-    ctxParams: any = {},
-  ```
+// 接受消息和任意数量的参数，最后一个如果时字符串是上下文
+log(message: any, ...optionalParams: [...any, string?]): void;
 
-  返回值：
+// 实际的方法实现，处理所有重载情况
+log(message: any, ...optionalParams: any[]): void;
 
-  ```json
-{
-    "code": 200,
-    "status": "success",
-    "message": "",
-    "result": {
-       "generatedMaps": [],
-        "raw": [],
-        "affected": 9
-    }
-}
-  ```
+```
 
-- saveManyBase  新增或更新单条或者多条实体
+> 使用实例：
 
-> 该方法将多条实体对象进行新增或编辑操作。根据主键查询决定是否新增还是修改，默认会开启事务。
+```typescript
+// 只传消息
+logger.log('用户登录成功');
 
-  参数：
-  ```js
-    entitiesDto: any[],  // 编辑实体数组对象
-    ctxParams: any = {}, // 系统上下文，系统会默认传入，可以改变
-    options: SaveOptions = { 
-                  reload: false,   // 更新或插入完成后是否返回插入实体信息
-                  transaction: true, // 开启事务(默认开启)
-              }, 
-  ```
+// 传消息和上下文
+logger.log('用户登录成功', 'context');
 
-  返回值：
+//  传递多个参数(最后一个参数如果是字符串是上下文)
+logger.log('用户登录成功', { userId: 123 });
+logger.log('用户登录成功', { userId: 123 }, 'AuthService');
 
-  ```json
-{
-    "code": 201,
-    "status": "success",
-    "message": "",
-    "result": [
-        { ... },  // 操作的实体
-        { ... },
-    ]
-}
-  ```
 
-- deleteBase 软删除单条或多条实体
 
-> 该方法将软删除单条或者多条实体，根据传递的主键对象或数组对软删标识进行更新操作（实体对象或数组对象应该只包含主键信息，如何包含其它信息将会被更新）。
+```
 
-  参数：
-  ```js
-    entitiesDto: any,  // 软删的实体数组对象
-    ctxParams: any = {}, // 系统上下文，系统会默认传入，可以改变
-    options: SaveOptions = { 
-                  reload: false,   // 更新或插入完成后是否返回插入实体信息
-                  transaction: false, // 开启事务(默认关闭)
-              }, 
-  ```
+> 日志级别
 
-  返回值：
+- info 信息
+- error 错误
+- warn 警告
+- debug 调试
+- verbose 详细
 
-  ```json
-{
-    "code": 200,
-    "status": "success",
-    "message": "",
-    "result": {
-       { ... }  // 实体对象
-    }
- }
-  ```
-- destoryBase 真删单条或多条实体
+> 日志文件存储目录
+
+- 默认存储在项目根目录下的logs文件夹中
+- 可以通过配置修改存储目录  
+
+> 日志文件命名
+
+- 默认的日志文件名是app.log，错误日志文件名是error.log
+- 可以通过配置修改日志文件名
   
-> 该方法根据传递的对象或者数组真删单条或者多条数据。
-
-  参数：
-
-  ```js
-    entitiesDto: any,  //删除的对象条件或对象数组
-    options: SaveOptions = { 
-              reload: false, 
-              transaction: false 
-            },
-  ```
-
-  返回值：
-
-  ```json
-{
-    "code": 200,
-    "status": "success",
-    "message": "",
-    "result": {
-    }
-}
-  ```
-
-- execute 执行rawsql
-
-> 该方法允许执行原生得sql语句，比较灵活。
-
-> 该方法根据传递的对象或者数组真删单条或者多条数据（注意：为了更好方式sql注入问题，不应该将外来参数拼接到sql语句中）。
-
-  参数：
-
-  ```js
-  querysql: string,  //sql语句
-  parameters?: object  //参数集合对象
-
-  ```
-
-  传参示例：
-  ```js
-   const sql = `select * from auth_role where role_name = :name and is_removed = :isRemoved`;
-   const params = {
-      name: 'string',
-      isRemoved: false,
-    };
-    return await this.roleService.execute(sql, params);
-  ```
-
-  返回值：
-
-  ```json
-{
-    "code": 200,
-    "status": "success",
-    "message": "",
-    "result": {
-    }
-}
-  ```
-
-
-
-
-#### 数据库迁移 
-
-#### 多库连接
-
-
-## @cs/nest-common
-
-
-### 日志模块
-
-日志模块在nest-cloud中已经全局注册，可以直接注入使用，具体使用方式请参考[日志](./logger/readme.md)
 
 
 ### 基础模型实体定义

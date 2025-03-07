@@ -1,6 +1,6 @@
 {
   "name": "@cs/nest-common",
-  "version": "3.0.0-beat.0",
+  "version": "3.0.0-beat.1",
   "description": "",
   "author": "danielmlc <danielmlc@126.com>",
   "homepage": "",
@@ -15,7 +15,8 @@
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "tsc -p ./tsconfig.json",
-    "watch": "tsc -p ./tsconfig.json --watch"
+    "watch": "tsc -p ./tsconfig.json --watch",
+    "publish": "pnpm publish --no-git-checks"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",

@@ -4,13 +4,13 @@ import { Repository, DataSource } from 'typeorm';
 import { SingleService } from '@cs/nest-typeorm';
 import { User } from './user.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { DBService } from '@cs/nest-typeorm';
 
 @Injectable()
 export class UserService extends SingleService<User> {
   constructor(
     @InjectRepository(User, 'test')
-    private userRepository: Repository<User>,
-    // private dataSource: DataSource,
+    private readonly userRepository: Repository<User>,
   ) {
     super(userRepository);
   }

@@ -15,7 +15,8 @@
   "scripts": {
    "prebuild": "rimraf lib",
     "build": "tsc -p ./tsconfig.json",
-    "watch": "tsc -p ./tsconfig.json --watch"
+    "watch": "tsc -p ./tsconfig.json --watch",
+     "publish": "pnpm publish --no-git-checks"
   },
   "dependencies": {
     "ioredis": "^5.4.2",
