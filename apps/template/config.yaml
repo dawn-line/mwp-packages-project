@@ -2,13 +2,13 @@ application:
   name: 'node-template-service'
   port: 3001
   serverPath: 'templateServer'
-  profiles.active: 'dev,local'
+  profiles.active: 'local'
 profiles.local:
   disableConsole: false
   logger:
     level: 'verbose'
   docs: 
-    name: '服务文档'
+    name: '服务文档111111111111111111'
     describe: '服务文档描述'
     version: 1.4
   loggerInterceptor: 

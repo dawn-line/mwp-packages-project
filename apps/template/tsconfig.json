@@ -5,7 +5,6 @@
   },
   "include": [
     "src/**/*.ts",
-    "../../libs/**/src/**/*.ts", "../../libs/nest-cas-client/src/cas-client.guard.ts11",
   ],
   "exclude": [
     "node_modules",

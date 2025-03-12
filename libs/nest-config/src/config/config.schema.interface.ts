@@ -88,8 +88,6 @@ enum LogLevel {
   VERBOSE = 'verbose',
   DEBUG = 'debug',
 }
-
-
 export interface EnvConfig {
   host: string;
   port: number;

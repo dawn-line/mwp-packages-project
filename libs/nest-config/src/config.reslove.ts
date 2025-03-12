@@ -43,19 +43,22 @@ export const resloveConfig = (
       const coverConfig = remoteConfig['applicationCover'];
       const appConfig = remoteConfig['application'].application;
       const serverConfig: YamlConfigSchema = remoteConfig.serviceConfig || {};
-      if (process.env.CS_SERVICEENV === 'dev' && localConfig) {
+      if (
+        (process.env.CS_SERVICEENV === 'dev' ||
+          process.env.CS_SERVICEENV === 'beat') &&
+        localConfig
+      ) {
         // 本地开发环境下
         const envArr = profilesActive.split(',');
-        let envConfig = {}; 
+        let envConfig = {};
         envArr.forEach((item) => {
-          if (item === 'dev') {
+          if (item === 'dev' || item === 'beat') {
             envConfig = defaultsDeep(envConfig, serverConfig.application);
           } else {
             envConfig = defaultsDeep(
               localConfig[`profiles.${item}`],
               envConfig,
             );
-            
           }
         });
         // 合并最终结果

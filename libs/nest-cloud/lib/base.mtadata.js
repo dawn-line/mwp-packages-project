@@ -24,6 +24,7 @@ function CSModule(sharedMetaData, configOption) {
             rpc_module_1.RpcModule.forRootAsync({
                 inject: [nest_config_1.ConfigService],
                 useFactory: async (config) => {
+                    console.log(config.getAll());
                     return {
                         ...config.get('rpc'),
                     };

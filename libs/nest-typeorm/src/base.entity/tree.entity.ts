@@ -4,8 +4,7 @@ export abstract class TreeEntity extends BaseEntity {
   @Column({
     name: 'parent_id',
     comment: '父节点主键',
-    type: 'varchar',
-    length: 50,
+    type: 'bigint',
     nullable: true,
   })
   parentId: string;

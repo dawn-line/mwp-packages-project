@@ -28,11 +28,13 @@ const resloveConfig = (options, remoteConfig) => {
             const coverConfig = remoteConfig['applicationCover'];
             const appConfig = remoteConfig['application'].application;
             const serverConfig = remoteConfig.serviceConfig || {};
-            if (process.env.CS_SERVICEENV === 'dev' && localConfig) {
+            if ((process.env.CS_SERVICEENV === 'dev' ||
+                process.env.CS_SERVICEENV === 'beat') &&
+                localConfig) {
                 const envArr = profilesActive.split(',');
                 let envConfig = {};
                 envArr.forEach((item) => {
-                    if (item === 'dev') {
+                    if (item === 'dev' || item === 'beat') {
                         envConfig = (0, lodash_1.defaultsDeep)(envConfig, serverConfig.application);
                     }
                     else {

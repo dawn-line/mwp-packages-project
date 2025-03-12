@@ -54,5 +54,4 @@ export class NacosConfig {
     );
     this.logger.log('nacos配置服务启用监听！');
   };
-
 }

@@ -17,6 +17,7 @@ interface Instance {
   clusterName?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface SubscribeInfo {
   serviceName: string;
   groupName?: string;

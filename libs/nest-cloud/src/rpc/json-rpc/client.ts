@@ -60,6 +60,7 @@ export class JsonRpcClient {
         method: req.method,
         params: req.params,
       };
+      console.log('request', request, url, reqOptions);
       // 如果是通知类请求，则直接发送请求并返回
       if (req.isNotify) {
         this.sendNotification(request, url, reqOptions);

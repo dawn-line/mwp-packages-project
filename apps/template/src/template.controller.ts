@@ -106,39 +106,15 @@ export class TemplateController {
     console.log('进入控制器:TEMPLATE');
     const response = await this.rpcClient.call({
       rpcConfig: {
-        serviceName: 'node-pf-cas-session-service',
-        servicePath: 'sessionServer',
+        serviceName: 'node-pf-id-generation-service',
+        servicePath: 'idGenerationServer',
       },
       payload: {
-        method: 'session.setSession',
-        params: {
-          sessionId: '1212',
-          userData: {
-            age: 18,
-            name: '张三11111',
-          },
-        },
-        isNotify: true,
+        method: 'id.createId',
+        params: '',
       },
     });
-
-    console.log('设置用户结果response:', response);
-    const response1 = await this.rpcClient.call({
-      rpcConfig: {
-        serviceName: 'node-pf-cas-session-service',
-        servicePath: 'sessionServer',
-      },
-      payload: {
-        method: 'session.getSession',
-        params: ['1212'],
-      },
-    });
-
-    console.log('获取用户结果response1:', response1);
-    if (response1.result) {
-      return '成功！';
-    } else {
-      throw new HttpException('执行失败', 401);
-    }
+    console.log('返回结果:', response);
+    return false;
   }
 }
