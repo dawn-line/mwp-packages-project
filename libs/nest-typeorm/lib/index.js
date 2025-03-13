@@ -20,5 +20,6 @@ __exportStar(require("./database.constants"), exports);
 __exportStar(require("./entity.registry"), exports);
 __exportStar(require("./base.entity"), exports);
 __exportStar(require("./base.service/single.service"), exports);
-__exportStar(require("./database.service"), exports);
+__exportStar(require("./base.repository"), exports);
+__exportStar(require("./dataSource.manager"), exports);
 //# sourceMappingURL=index.js.map

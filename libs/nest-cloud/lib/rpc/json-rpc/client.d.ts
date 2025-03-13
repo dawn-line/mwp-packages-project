@@ -4,7 +4,7 @@ export declare class JsonRpcClient {
     private rpcConfig;
     private axiosInstance;
     constructor(rpcConfig: JSONRPCConfig);
-    call(requestClient: JsonRpcRequestClient, reqOptions?: AxiosRequestConfig): Promise<JsonRpcResponse | void>;
+    call(requestClient: JsonRpcRequestClient, reqOptions?: AxiosRequestConfig): Promise<JsonRpcResponse>;
     private sendNotification;
     private sendRequest;
 }

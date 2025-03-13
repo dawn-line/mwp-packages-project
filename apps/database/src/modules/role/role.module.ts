@@ -5,7 +5,7 @@ import { RoleController } from './role.controller';
 import { Role } from './role.entity';
 @Module({
   imports: [
-    DatabaseModule.forFeatures([{ connectionName: 'test1', entities: [Role] }]),
+    // DatabaseModule.forFeatures([{ connectionName: 'test1', entities: [Role] }]),
   ],
   providers: [RoleService],
   exports: [RoleService],

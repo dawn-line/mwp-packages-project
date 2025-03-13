@@ -6,56 +6,60 @@ import {
   Param,
   Put,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(@Body() userData: Partial<User>) {
-    const result = await this.userService.createUser(userData);
-    return { success: result > 0, affectedRows: result };
+  async create(@Body() user: Partial<UserEntity>) {
+    const result = await this.userService.create(user);
+    return { success: result > 0, data: result };
   }
 
-  @Get()
-  async findAll() {
-    return this.userService.findActiveUsers();
+  @Post('batch')
+  async createMany(@Body() users: Partial<UserEntity>[]) {
+    const result = await this.userService.createMany(users);
+    return { success: result > 0, data: result };
   }
 
-  @Get('sql')
-  async findBySql() {
-    return this.userService.findActiveUsersBySQL();
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() userData: Partial<UserEntity>) {
+    const result = await this.userService.update(id, userData);
+    return { success: result > 0, data: result };
+  }
+
+  @Delete(':id')
+  async softDelete(@Param('id') id: string) {
+    const result = await this.userService.softDelete(id);
+    return { success: result > 0, data: result };
+  }
+
+  @Delete(':id/hard')
+  async hardDelete(@Param('id') id: string) {
+    const result = await this.userService.hardDelete(id);
+    return { success: result > 0, data: result };
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.userService.findOne({ id });
+    const user = await this.userService.findOne(id);
+    return { success: !!user, data: user };
   }
 
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() userData: Partial<User>) {
-    const result = await this.userService.updateByCondition(userData, { id });
-    return { success: result > 0, affectedRows: result };
+  @Get()
+  async findAll(@Query() query: Partial<UserEntity>) {
+    const users = await this.userService.findAll(query);
+    return { success: true, data: users };
   }
 
-  @Put(':id/disable')
-  async disable(@Param('id') id: string) {
-    const result = await this.userService.disableUser(id);
-    return { success: result > 0, affectedRows: result };
-  }
-
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    const result = await this.userService.deleteUser(id);
-    return { success: result > 0, affectedRows: result };
-  }
-
-  @Post('batch')
-  async createMultiple(@Body() usersData: Partial<User>[]) {
-    const result = await this.userService.createMultipleUsers(usersData);
-    return { success: result > 0, affectedRows: result };
+  @Get('page')
+  async findPage(@Query('page') page = 1, @Query('size') size = 10) {
+    const result = await this.userService.findWithPagination(page, size);
+    return { success: true, data: result };
   }
 }

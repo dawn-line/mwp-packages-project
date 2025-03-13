@@ -1,12 +1,12 @@
 import { EntityClassOrSchema } from './database.types';
+import { DEFAULT_CONNECTION_NAME } from './database.constants';
 class EntityRegistry {
   private static entities: Map<string, Set<EntityClassOrSchema>> = new Map();
 
   static register(
-    connectionName = 'default',
+    connectionName = DEFAULT_CONNECTION_NAME,
     entity: EntityClassOrSchema,
   ): void {
-    console.log(11111, connectionName, entity);
     if (!this.entities.has(connectionName)) {
       this.entities.set(connectionName, new Set());
     }

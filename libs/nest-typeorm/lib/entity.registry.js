@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllEntityMappings = exports.getRegisteredEntities = exports.registerEntity = void 0;
+const database_constants_1 = require("./database.constants");
 class EntityRegistry {
-    static register(connectionName = 'default', entity) {
-        console.log(11111, connectionName, entity);
+    static register(connectionName = database_constants_1.DEFAULT_CONNECTION_NAME, entity) {
         if (!this.entities.has(connectionName)) {
             this.entities.set(connectionName, new Set());
         }

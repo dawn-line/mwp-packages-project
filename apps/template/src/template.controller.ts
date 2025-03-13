@@ -104,17 +104,8 @@ export class TemplateController {
   @Get('test-rpc')
   async testRpc() {
     console.log('进入控制器:TEMPLATE');
-    const response = await this.rpcClient.call({
-      rpcConfig: {
-        serviceName: 'node-pf-id-generation-service',
-        servicePath: 'idGenerationServer',
-      },
-      payload: {
-        method: 'id.createId',
-        params: '',
-      },
-    });
+    const response = await this.rpcClient.getNewId();
     console.log('返回结果:', response);
-    return false;
+    return response.result;
   }
 }

@@ -1,67 +1,82 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
-import { SingleService } from '@cs/nest-typeorm';
-import { User } from './user.entity';
-import { v4 as uuidv4 } from 'uuid';
-import { DBService } from '@cs/nest-typeorm';
+import { UserRepository } from './user.repository';
+import { UserEntity } from './user.entity';
+import { QueryConditionInput } from '@cs/nest-common';
 
 @Injectable()
-export class UserService extends SingleService<User> {
-  constructor(
-    @InjectRepository(User, 'test')
-    private readonly userRepository: Repository<User>,
-  ) {
-    super(userRepository);
-  }
+export class UserService {
+  constructor(private readonly userRepository: UserRepository) {}
 
   // 创建用户
-  async createUser(userData: Partial<User>): Promise<number> {
-    const user = this.userRepository.create({
-      ...userData,
+  async create(user: Partial<UserEntity>): Promise<number> {
+    // 生成唯一ID
+    user.id = Date.now().toString();
+    // 设置创建者信息
+    user.creatorId = 'system';
+    user.creatorName = 'System';
+    return this.userRepository.saveOne(user);
+  }
+
+  // 批量创建用户
+  async createMany(users: Partial<UserEntity>[]): Promise<number> {
+    // 为每个用户设置ID和创建者信息
+    users.forEach(user => {
+      user.id = Date.now().toString() + Math.floor(Math.random() * 1000);
+      user.creatorId = 'system';
+      user.creatorName = 'System';
     });
-    return this.saveOne(user);
+    return this.userRepository.saveMany(users);
   }
 
-  // 查找用户并过滤掉已删除的
-  async findActiveUsers(): Promise<User[]> {
-    return this.findMany({ isRemoved: false });
-  }
-
-  // 用户登录检查
-  async checkUserCredentials(
-    username: string,
-    password: string,
-  ): Promise<User | null> {
-    const user = await this.findOne({
-      username,
-      password,
-      isEnable: true,
-      isRemoved: false,
-    });
-    return user;
-  }
-
-  // 禁用用户
-  async disableUser(userId: string): Promise<number> {
-    return this.updateByCondition({ isEnable: false }, { id: userId });
+  // 更新用户
+  async update(id: string, userData: Partial<UserEntity>): Promise<number> {
+    // 设置更新者信息
+    userData.modifierId = 'system';
+    userData.modifierName = 'System';
+    return this.userRepository.updateByCondition(userData, { id });
   }
 
   // 软删除用户
-  async deleteUser(userId: string): Promise<number> {
-    return this.hardDelete({ id: userId });
+  async softDelete(id: string): Promise<any> {
+    return this.userRepository.softDelete({ id });
   }
 
-  // 查找活跃用户（通过原生SQL）
-  async findActiveUsersBySQL(): Promise<any[]> {
-    return this.executeSql(
-      `SELECT * FROM sys_user WHERE is_enable = :isEnable AND is_removed = :isRemoved ORDER BY created_at DESC LIMIT 10`,
-      { isEnable: true, isRemoved: false },
-    );
+  // 硬删除用户
+  async hardDelete(id: string): Promise<number> {
+    return this.userRepository.hardDelete({ id });
   }
 
-  // 事务示例：创建多个用户
-  async createMultipleUsers(usersData: Partial<User>[]): Promise<number> {
-    return await this.saveMany(usersData);
+  // 获取单个用户
+  async findOne(id: string): Promise<UserEntity> {
+    return this.userRepository.findOne({ where: { id, isRemoved: false } });
+  }
+
+  // 获取用户列表
+  async findAll(query?: Partial<UserEntity>): Promise<UserEntity[]> {
+    const conditions = { ...query, isRemoved: false };
+    return this.userRepository.find({ where: conditions });
+  }
+
+  // 分页查询用户
+  async findWithPagination(page: number, size: number): Promise<any> {
+    const queryCondition: QueryConditionInput = {
+      tableName: 'user',
+      conditionLambda: 'user.is_removed = :isRemoved',
+      conditionValue: { isRemoved: false },
+      orderBy: { 'user.created_at': 'DESC' },
+      skip: (page - 1) * size,
+      take: size,
+    };
+
+    return this.userRepository.findManyBase(queryCondition);
+  }
+
+  // 通过自定义SQL查询用户
+  async findByCustomSql(status: number): Promise<any> {
+    const sql = `
+      SELECT * FROM user 
+      WHERE status = :status AND is_removed = :isRemoved
+    `;
+    return this.userRepository.(sql, [status, false]);
   }
 }

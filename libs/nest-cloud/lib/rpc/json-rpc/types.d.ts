@@ -27,7 +27,12 @@ export interface JSONRPCError {
     message: string;
     data?: any;
 }
-export type JsonRpcResponse = JsonRpcSuccessResponse | JSONRPCErrorResponse;
+export interface JsonRpcResponse {
+    jsonrpc: JSONRPC;
+    result?: JSONValue;
+    error?: JSONRPCError;
+    id: JSONRPCID;
+}
 export interface JSONRPCConfig {
     protocol: string;
     timeout: number;

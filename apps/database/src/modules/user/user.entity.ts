@@ -1,19 +1,17 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 import { HasPrimaryFullEntity, registerEntity } from '@cs/nest-typeorm';
 
-@Entity({ name: 'sys_user' })
-export class User extends HasPrimaryFullEntity {
-  @PrimaryColumn({
-    name: 'user_role_id',
-    comment: '用户角色id',
-    type: 'bigint',
-  })
-  userRoleId: string;
+@Entity({
+  name: 'user',
+  comment: '用户表',
+})
+export class UserEntity extends HasPrimaryFullEntity {
   @Column({
     name: 'username',
     comment: '用户名',
     type: 'varchar',
     length: 50,
+    nullable: false,
   })
   username: string;
 
@@ -22,6 +20,7 @@ export class User extends HasPrimaryFullEntity {
     comment: '密码',
     type: 'varchar',
     length: 100,
+    nullable: false,
   })
   password: string;
 
@@ -42,7 +41,15 @@ export class User extends HasPrimaryFullEntity {
     nullable: true,
   })
   phone: string;
-}
 
+  @Column({
+    name: 'status',
+    comment: '状态: 1-正常, 0-禁用',
+    type: 'tinyint',
+    default: 1,
+    nullable: true,
+  })
+  status: number;
+}
 // 注册实体到 test 数据库连接
-registerEntity('test', User);
+// registerEntity('test', User);

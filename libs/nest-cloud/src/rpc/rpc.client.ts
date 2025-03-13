@@ -23,7 +23,7 @@ export class RpcClient {
     // 获取nacos实例
     this.nacosNaming = this.initNacosNaming();
   }
-  async call(request: RpcRequestClient): Promise<JsonRpcResponse | void> {
+  async call(request: RpcRequestClient): Promise<JsonRpcResponse> {
     const { rpcConfig, payload, reqOptions } = request;
     const instance = await this.getHealthyInstance(rpcConfig);
     let url = `${this.options.protocol}://${instance.ip}:${instance.port}`;
@@ -51,6 +51,27 @@ export class RpcClient {
         stack: error.stack,
       });
     }
+  }
+
+  // 异步获取新ID
+  async getNewId(number = 1): Promise<any> {
+    // 调用idGenerationServer服务，获取新ID
+    const reponse = await this.call({
+      rpcConfig: {
+        serviceName: 'node-pf-id-generation-service',
+        servicePath: 'idGenerationServer',
+      },
+      payload: {
+        method: 'id.batchCreateId',
+        params: number,
+      },
+    });
+    // 如果获取成功，返回result
+    if (reponse.result) {
+      return reponse.result;
+    }
+    // 否则返回error
+    return reponse.error;
   }
 
   private initNacosNaming(): NacosNaming {

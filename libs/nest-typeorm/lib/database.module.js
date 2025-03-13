@@ -9,81 +9,110 @@ var DatabaseModule_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseModule = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
-const entity_registry_1 = require("./entity.registry");
-const database_service_1 = require("./database.service");
+const typeorm_1 = require("typeorm");
+const nest_common_1 = require("@cs/nest-common");
 const database_constants_1 = require("./database.constants");
+const dataSource_manager_1 = require("./dataSource.manager");
+const entity_registry_1 = require("./entity.registry");
 let DatabaseModule = DatabaseModule_1 = class DatabaseModule {
     static forRoot(options) {
-        const connections = [];
-        for (const key in options) {
-            const element = options[key];
-            const registeredEntities = (0, entity_registry_1.getRegisteredEntities)(element.name);
-            connections.push(typeorm_1.TypeOrmModule.forRoot({
-                ...element,
-                name: element.name,
-                entities: [...registeredEntities],
-            }));
-        }
+        const connectionProvider = this.createConnectionProvider(options);
         return {
             module: DatabaseModule_1,
-            imports: [...connections],
+            providers: [
+                {
+                    provide: database_constants_1.DATABASE_MODULE_OPTIONS,
+                    useValue: options,
+                },
+                connectionProvider,
+                {
+                    provide: database_constants_1.DATA_SOURCE_MANAGER,
+                    useFactory: (connections) => {
+                        return new dataSource_manager_1.DataSourceManagerImpl(connections);
+                    },
+                    inject: [database_constants_1.DATABASE_CONNECTIONS],
+                },
+            ],
+            exports: [
+                database_constants_1.DATABASE_MODULE_OPTIONS,
+                database_constants_1.DATABASE_CONNECTIONS,
+                database_constants_1.DATA_SOURCE_MANAGER,
+            ],
             global: true,
         };
     }
     static forRootAsync(options) {
         return {
             module: DatabaseModule_1,
-            imports: [
-                ...(options.imports || []),
-                typeorm_1.TypeOrmModule.forRootAsync({
-                    inject: options.inject,
-                    useFactory: async (...args) => {
-                        const dbOptions = await options.useFactory(...args);
-                        const registeredEntities = (0, entity_registry_1.getRegisteredEntities)();
-                        return {
-                            ...dbOptions,
-                            entities: [...registeredEntities],
-                        };
-                    },
-                }),
-            ],
+            imports: options.imports || [],
             providers: [
                 {
                     provide: database_constants_1.DATABASE_MODULE_OPTIONS,
                     useFactory: options.useFactory,
-                    inject: options.inject,
+                    inject: options.inject || [],
                 },
-                database_service_1.DBService,
+                {
+                    provide: database_constants_1.DATABASE_CONNECTIONS,
+                    useFactory: async (dbOptions) => {
+                        for (const key in dbOptions) {
+                            const element = dbOptions[key];
+                            element.entities = (0, entity_registry_1.getRegisteredEntities)(key);
+                            element.name = key;
+                        }
+                        return await this.createConnections(dbOptions);
+                    },
+                    inject: [database_constants_1.DATABASE_MODULE_OPTIONS],
+                },
+                {
+                    provide: database_constants_1.DATA_SOURCE_MANAGER,
+                    useFactory: (connections) => {
+                        return new dataSource_manager_1.DataSourceManagerImpl(connections);
+                    },
+                    inject: [database_constants_1.DATABASE_CONNECTIONS],
+                },
             ],
-            exports: [database_service_1.DBService],
+            exports: [
+                database_constants_1.DATABASE_MODULE_OPTIONS,
+                database_constants_1.DATABASE_CONNECTIONS,
+                database_constants_1.DATA_SOURCE_MANAGER,
+            ],
             global: true,
         };
     }
-    static forFeature(registration) {
+    static createConnectionProvider(options) {
         return {
-            module: DatabaseModule_1,
-            imports: [
-                typeorm_1.TypeOrmModule.forFeature(registration.entities, registration.connectionName),
-            ],
-            exports: [
-                typeorm_1.TypeOrmModule.forFeature(registration.entities, registration.connectionName),
-            ],
+            provide: database_constants_1.DATABASE_CONNECTIONS,
+            useFactory: async () => {
+                for (const key in options) {
+                    const element = options[key];
+                    element.entities = (0, entity_registry_1.getRegisteredEntities)(key);
+                    element.name = key;
+                }
+                return await this.createConnections(options);
+            },
         };
     }
-    static forFeatures(registrations) {
-        const imports = [];
-        const exports = [];
-        registrations.forEach((registration) => {
-            const typeOrmFeatureModule = typeorm_1.TypeOrmModule.forFeature(registration.entities, registration.connectionName);
-            imports.push(typeOrmFeatureModule);
-            exports.push(typeOrmFeatureModule);
-        });
-        return {
-            module: DatabaseModule_1,
-            imports,
-            exports,
-        };
+    static async createConnections(options) {
+        const connections = new Map();
+        const logger = new nest_common_1.LoggerService();
+        for (const key in options) {
+            const connectionOptions = options[key];
+            const name = connectionOptions.name || key;
+            if (connections.has(name)) {
+                throw new Error(`数据库初始化错误: 连接名称 "${name}" 必须唯一`);
+            }
+            const dataSource = new typeorm_1.DataSource(connectionOptions);
+            try {
+                await dataSource.initialize();
+                logger.log(`数据库连接 "${name}" 初始化成功!`, 'DatabaseModule');
+                connections.set(name, dataSource);
+            }
+            catch (error) {
+                logger.error(`数据库连接 "${name}" 初始化失败${error}`, 'DatabaseModule');
+                throw error;
+            }
+        }
+        return connections;
     }
 };
 exports.DatabaseModule = DatabaseModule;

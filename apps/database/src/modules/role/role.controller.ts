@@ -27,7 +27,6 @@ export class RoleController {
     return result;
   }
 
-
   @Get()
   async findAll() {
     return this.roleService.findAllEnabledRoles();

@@ -26,7 +26,6 @@ class JsonRpcClient {
                 method: req.method,
                 params: req.params,
             };
-            console.log('request', request, url, reqOptions);
             if (req.isNotify) {
                 this.sendNotification(request, url, reqOptions);
                 return;

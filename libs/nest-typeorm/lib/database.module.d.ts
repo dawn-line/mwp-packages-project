@@ -1,9 +1,9 @@
 import { DynamicModule } from '@nestjs/common';
-import { DatabaseModuleOptions, DatabaseModuleAsyncOptions, EntityRegistration } from './database.types';
+import { DatabaseModuleOptions, DatabaseModuleAsyncOptions } from './database.types';
 export declare class DatabaseModule {
     static forRoot(options: DatabaseModuleOptions): DynamicModule;
     static forRootAsync(options: DatabaseModuleAsyncOptions): DynamicModule;
-    static forFeature(registration: EntityRegistration): DynamicModule;
-    static forFeatures(registrations: EntityRegistration[]): DynamicModule;
+    private static createConnectionProvider;
+    private static createConnections;
 }
 //# sourceMappingURL=database.module.d.ts.map

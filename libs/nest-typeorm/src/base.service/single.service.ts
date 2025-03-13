@@ -7,7 +7,6 @@ import {
   FindOneOptions,
 } from 'typeorm';
 import { CommonUtil, QueryConditionInput, PageResult } from '@cs/nest-common';
-import { DBService } from '../database.service';
 @Injectable()
 export abstract class SingleService<T extends ObjectLiteral> {
   constructor(protected readonly repository: Repository<T>) {}
@@ -88,7 +87,6 @@ export abstract class SingleService<T extends ObjectLiteral> {
     } else {
       // 非分页查询
       const result = await queryBuilder.getMany();
-      console.log(result);
       return result as any;
     }
   }
@@ -209,7 +207,6 @@ export abstract class SingleService<T extends ObjectLiteral> {
       // console.debug(`SQL执行完成，耗时: ${execTime}ms`);
       // 处理结果
       if (Array.isArray(records)) {
-        console.log(records);
         CommonUtil.transRecords(records);
       }
 

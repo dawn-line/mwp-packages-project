@@ -17,20 +17,20 @@ profiles.local:
   mysql:
     test:
       type: 'mysql'
-      host: '192.168.5.125'
+      host: 'rm-mwp-pre-inner.mysql.rds.aliyuncs.com'
       port: 3306
-      username: 'root'
-      password: 'a1234567.'
+      username: 'yearrow_pre_root'
+      password: 'ylkj88227793@@@!'
       database: 'test'
       synchronize: true
       timeout: 10000
       logging: true
     test1:
       type: 'mysql'
-      host: '192.168.5.125'
+      host: 'rm-mwp-pre-inner.mysql.rds.aliyuncs.com'
       port: 3306
-      username: 'root'
-      password: 'a1234567.'
+      username: 'yearrow_pre_root'
+      password: 'ylkj88227793@@@!'
       database: 'test1'
       synchronize: true
       timeout: 10000

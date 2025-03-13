@@ -54,6 +54,22 @@ let RpcClient = class RpcClient {
             });
         }
     }
+    async getNewId(number = 1) {
+        const reponse = await this.call({
+            rpcConfig: {
+                serviceName: 'node-pf-id-generation-service',
+                servicePath: 'idGenerationServer',
+            },
+            payload: {
+                method: 'id.batchCreateId',
+                params: number,
+            },
+        });
+        if (reponse.result) {
+            return reponse.result;
+        }
+        return reponse.error;
+    }
     initNacosNaming() {
         const nacosName = process.env.CS_NACOSNAME;
         const nacosPassword = process.env.CS_NACOSPASSWORD;

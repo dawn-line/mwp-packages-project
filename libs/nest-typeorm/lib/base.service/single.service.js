@@ -54,7 +54,6 @@ let SingleService = class SingleService {
         }
         else {
             const result = await queryBuilder.getMany();
-            console.log(result);
             return result;
         }
     }
@@ -105,7 +104,6 @@ let SingleService = class SingleService {
             }
             const records = await this.repository.query(processedSql, paramValues);
             if (Array.isArray(records)) {
-                console.log(records);
                 nest_common_1.CommonUtil.transRecords(records);
             }
             return records;

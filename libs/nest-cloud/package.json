@@ -1,6 +1,6 @@
 {
   "name": "@cs/nest-cloud",
-  "version": "2.0.0-beat.4",
+  "version": "2.0.0-beat.5",
   "description": "服务启动 注册 跨服务相关包",
   "author": "danielmlc <danielmlc@126.com>",
   "homepage": "",

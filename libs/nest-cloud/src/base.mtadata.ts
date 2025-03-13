@@ -34,7 +34,6 @@ export function CSModule(
         {
           inject: [ConfigService],
           useFactory: async (config: ConfigService) => {
-            console.log(config.getAll());
             return {
               ...config.get('rpc'),
             };

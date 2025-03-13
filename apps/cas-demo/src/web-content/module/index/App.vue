@@ -257,7 +257,6 @@ const getAppList = async function () {
 
 const getProfile = async function () {
   const result = await $http().get('/casDemoServer')
-  console.log(1111,result)
   // if (result.data && result.data.status === 'success') {
   //   const { userName, realName, userId, email, phone } = result.data.result
   //   userInfo.userName = userName

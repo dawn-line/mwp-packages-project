@@ -19,8 +19,7 @@ __decorate([
     (0, typeorm_1.Column)({
         name: 'parent_id',
         comment: '父节点主键',
-        type: 'varchar',
-        length: 50,
+        type: 'bigint',
         nullable: true,
     }),
     __metadata("design:type", String)

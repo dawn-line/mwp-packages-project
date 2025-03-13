@@ -6,7 +6,8 @@ export declare class RpcClient {
     private nacosNaming;
     private readonly logger;
     constructor(options: RpcModuleOptions);
-    call(request: RpcRequestClient): Promise<JsonRpcResponse | void>;
+    call(request: RpcRequestClient): Promise<JsonRpcResponse>;
+    getNewId(number?: number): Promise<any>;
     private initNacosNaming;
     private getHealthyInstance;
 }

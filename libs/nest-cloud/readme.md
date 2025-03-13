@@ -243,6 +243,13 @@ export class UserService {
 - 数组形式传参时，参数数量不能超过方法定义的参数数量
 - 参数验证失败会抛出 RpcInvalidParamsException 异常
 
+
+##### 获取id方法
+
+```ts
+const id = await this.rpcClient.getNewId();  // 获取单个id
+const ids = await this.rpcClient.getNewId(100);  // 获取多个id
+```
 ---
 
 
