@@ -18,7 +18,7 @@ export class RepositoryFactory {
     customRepositoryClass: Type<R>,
   ): R {
     // 获取实体的元数据
-    const entityMetadata = dataSource.getMetadata(entity);
+    // const entityMetadata = dataSource.getMetadata(entity);
 
     // 创建自定义仓储实例
     const repository = new customRepositoryClass();

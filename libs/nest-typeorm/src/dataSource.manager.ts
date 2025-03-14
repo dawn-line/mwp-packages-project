@@ -58,7 +58,7 @@ export class DataSourceManagerImpl implements DataSourceManager {
   }
 
   /**
-   * 为指定实体和数据源创建自定义仓储
+   * 为指定实体和数据源创建自定义仓储 (原始BaseRepository版本，为了兼容保留)
    * @param entity 实体类
    * @param customRepositoryClass 自定义仓储类
    * @param connectionName 连接名称

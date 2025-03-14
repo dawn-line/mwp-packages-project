@@ -62,13 +62,17 @@ export class DatabaseModule {
         {
           provide: DATABASE_CONNECTIONS,
           useFactory: async (dbOptions: DatabaseModuleOptions) => {
-            // 自动注入实体
+            // 创建配置的副本并注入实体
+            const configWithEntities: DatabaseModuleOptions = {};
             for (const key in dbOptions) {
-              const element = dbOptions[key];
-              element.entities = getRegisteredEntities(key);
-              element.name = key;
+              // 创建新的配置对象
+              configWithEntities[key] = {
+                ...dbOptions[key],
+                entities: getRegisteredEntities(key),
+                name: key,
+              };
             }
-            return await this.createConnections(dbOptions);
+            return await this.createConnections(configWithEntities);
           },
           inject: [DATABASE_MODULE_OPTIONS],
         },
@@ -99,13 +103,17 @@ export class DatabaseModule {
     return {
       provide: DATABASE_CONNECTIONS,
       useFactory: async () => {
-        // 自动注入实体
+        // 创建配置的副本并注入实体
+        const configWithEntities: DatabaseModuleOptions = {};
         for (const key in options) {
-          const element = options[key];
-          element.entities = getRegisteredEntities(key);
-          element.name = key;
+          // 创建新的配置对象
+          configWithEntities[key] = {
+            ...options[key],
+            entities: getRegisteredEntities(key),
+            name: key,
+          };
         }
-        return await this.createConnections(options);
+        return await this.createConnections(configWithEntities);
       },
     };
   }

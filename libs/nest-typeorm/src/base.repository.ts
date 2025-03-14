@@ -4,8 +4,8 @@ import {
   FindOptionsWhere,
   DeepPartial,
   FindOneOptions,
-  UpdateResult,
 } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { QueryConditionInput, PageResult, CommonUtil } from '@cs/nest-common';
 
 export abstract class BaseRepository<
@@ -123,7 +123,7 @@ export abstract class BaseRepository<
     updateData: Partial<T>,
     conditions: Partial<T>,
   ): Promise<number> {
-    (updateData as any).version = Date.now();
+    // 版本号由@BeforeUpdate和@BeforeInsert钩子自动管理
     const result = await this.update(
       conditions as FindOptionsWhere<T>,
       updateData as any,
@@ -136,12 +136,12 @@ export abstract class BaseRepository<
    * @param conditions 条件对象
    * @returns 处理结果影响条目数
    */
-  async softDelete(conditions: Partial<T>): Promise<UpdateResult> {
+  async softDeletion(conditions: Partial<T>): Promise<number> {
     const result = await this.update(
       conditions as FindOptionsWhere<T>,
-      { isRemoved: true, version: Date.now() } as any,
+      { isRemoved: true } as any,
     );
-    return result;
+    return result.affected || 0;
   }
 
   /**
@@ -209,3 +209,8 @@ export abstract class BaseRepository<
     }
   }
 }
+
+@Injectable()
+export class CustomRepository<
+  T extends ObjectLiteral,
+> extends BaseRepository<T> {}

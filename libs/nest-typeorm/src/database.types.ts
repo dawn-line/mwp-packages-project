@@ -1,7 +1,6 @@
-import { DataSource, EntityTarget } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
-import { ModuleMetadata, Type } from '@nestjs/common';
-import { BaseRepository } from './base.repository';
+import { ModuleMetadata } from '@nestjs/common';
 export interface EntityClassOrSchema {
   new (...args: any[]): any;
 }
@@ -46,16 +45,4 @@ export interface DataSourceManager {
    * 获取所有数据源
    */
   getAllDataSources(): Map<string, DataSource>;
-
-  /**
-   * 为指定实体和数据源创建自定义仓储
-   * @param entity 实体类
-   * @param customRepositoryClass 自定义仓储类
-   * @param connectionName 连接名称
-   */
-  getCustomRepository<T, R extends BaseRepository<T>>(
-    entity: EntityTarget<T>,
-    customRepositoryClass: Type<R>,
-    connectionName?: string,
-  ): R;
 }

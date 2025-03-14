@@ -70,12 +70,11 @@ let SingleService = class SingleService {
         return result.length;
     }
     async updateByCondition(updateData, conditions) {
-        updateData.version = Date.now();
         const result = await this.repository.update(conditions, updateData);
         return result.affected || 0;
     }
     async softDelete(conditions) {
-        const result = await this.repository.update(conditions, { isRemoved: true, version: Date.now() });
+        const result = await this.repository.update(conditions, { isRemoved: true });
         return result.affected || 0;
     }
     async hardDelete(conditions) {

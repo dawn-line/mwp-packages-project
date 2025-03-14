@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RepositoryFactory = void 0;
 class RepositoryFactory {
     static create(dataSource, entity, customRepositoryClass) {
-        const entityMetadata = dataSource.getMetadata(entity);
         const repository = new customRepositoryClass();
         const baseRepository = dataSource.getRepository(entity);
         Object.keys(baseRepository).forEach((key) => {

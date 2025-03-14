@@ -1,182 +1,112 @@
+import { BaseRepository } from '@cs/nest-typeorm';
 import { Injectable } from '@nestjs/common';
-import { DataSource, EntityManager, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { DATA_SOURCE_MANAGER } from '@cs/nest-typeorm';
-import { Inject } from '@nestjs/common';
-import { DataSourceManager, BaseRepository } from '@cs/nest-typeorm';
-import { InjectDataSourceManager } from '../decorators';
 
-/**
- * 用户仓库 - 使用委托方式而不是继承方式实现
- */
 @Injectable()
-export class UserRepository {
-  private readonly repository: Repository<UserEntity>;
-
-  constructor(
-    // 注入数据源管理器
-    @InjectDataSourceManager()
-    private readonly dataSourceManager: DataSourceManager,
-  ) {
-    // 使用默认数据源获取标准仓库实例
-    const dataSource = this.dataSourceManager.getDataSource('test');
-    this.repository = dataSource.getRepository(UserEntity);
-  }
-
-  // 基本查询方法
-  async findOne(conditions: Partial<UserEntity>): Promise<UserEntity> {
-    return this.repository.findOne({ where: conditions });
-  }
-
-  async findMany(
-    conditions: Partial<UserEntity>,
-    take?: number,
-    skip?: number,
-  ): Promise<UserEntity[]> {
-    return this.repository.find({
-      where: conditions,
-      take,
-      skip,
-    });
-  }
-
-  // 实体保存方法
-  async saveOne(entity: Partial<UserEntity>): Promise<number> {
-    const entityDto = this.repository.create(entity);
-    const result = await this.repository.save(entityDto, {
-      transaction: false, // 禁用事务
-    });
-    return result ? 1 : 0;
-  }
-
-  async saveMany(entities: Partial<UserEntity>[]): Promise<number> {
-    const entityDtos = entities.map((entity) => this.repository.create(entity));
-    const result = await this.repository.save(entityDtos);
-    return result.length;
-  }
-
-  // 更新方法
-  async updateByCondition(
-    updateData: Partial<UserEntity>,
-    conditions: Partial<UserEntity>,
-  ): Promise<number> {
-    (updateData as any).version = Date.now();
-    const result = await this.repository.update(conditions, updateData);
-    return result.affected || 0;
-  }
-
-  // 软删除与硬删除
-  async softDelete(conditions: Partial<UserEntity>): Promise<any> {
-    const result = await this.repository.update(conditions, {
-      isRemoved: true,
-      version: Date.now(),
-    } as any);
-    return result;
-  }
-
-  async hardDelete(conditions: Partial<UserEntity>): Promise<number> {
-    const result = await this.repository.delete(conditions);
-    return result.affected || 0;
-  }
-
-  // 自定义查询方法
+export class UserRepository extends BaseRepository<UserEntity> {
+  /**
+   * 根据用户名查找用户
+   * @param username 用户名
+   * @returns 用户实体
+   */
   async findByUsername(username: string): Promise<UserEntity> {
     return this.findOne({ username });
   }
 
-  async findActiveUsers(): Promise<UserEntity[]> {
-    return this.findMany({ status: 1, isRemoved: false });
+  /**
+   * 更新用户状态
+   * @param id 用户ID
+   * @param status 用户状态
+   * @returns 影响行数
+   */
+  async updateStatus(id: string, status: number): Promise<number> {
+    return this.updateByCondition({ status }, { id });
   }
 
-  // 高级查询与SQL执行
-  async findManyBase<R>(queryConditionInput: any): Promise<R[] | any> {
-    // 创建基本查询构建器
-    const queryBuilder = this.repository.createQueryBuilder(
-      queryConditionInput.tableName,
-    );
-
-    // 添加选择的字段
-    if (queryConditionInput.select) {
-      queryBuilder.select(queryConditionInput.select);
-    }
-
-    // 添加条件
-    if (queryConditionInput.conditionLambda) {
-      queryBuilder.where(
-        queryConditionInput.conditionLambda,
-        queryConditionInput.conditionValue || {},
-      );
-    }
-
-    // 添加排序
-    if (queryConditionInput.orderBy) {
-      queryBuilder.orderBy(queryConditionInput.orderBy);
-    }
-
-    // 添加限制数量
-    if (queryConditionInput.take !== undefined) {
-      queryBuilder.take(queryConditionInput.take);
-    }
-
-    // 判断是否需要分页
-    if (queryConditionInput.skip !== undefined) {
-      // 分页查询
-      queryBuilder.skip(queryConditionInput.skip);
-
-      // 使用countQuery缓存计数查询，避免重复执行相同条件的查询
-      const [result, count] = await queryBuilder.getManyAndCount();
-
-      return {
-        result: result as any,
-        count,
-      };
-    } else {
-      // 非分页查询
-      const result = await queryBuilder.getMany();
-      return result as any;
-    }
+  /**
+   * 验证用户账号密码
+   * @param username 用户名
+   * @param password 密码
+   * @returns 用户信息或null
+   */
+  async validateUser(username: string, password: string): Promise<UserEntity> {
+    return this.findOne({ username, password, isRemoved: false });
   }
 
-  async executeSql(
-    querySql: string,
-    parameters?: Record<string, any>,
-  ): Promise<any> {
-    try {
-      // 参数处理
-      let processedSql = querySql;
-      const paramValues: any[] = [];
+  /**
+   * 获取部门下的所有用户
+   * @param deptId 部门ID
+   * @returns 用户列表
+   */
+  async findByDeptId(deptId: string): Promise<UserEntity[]> {
+    return this.findMany({ deptId, isRemoved: false });
+  }
 
-      if (parameters && Object.keys(parameters).length > 0) {
-        const namedParamRegex = /\:(\w+)/g;
-        const matches = [...querySql.matchAll(namedParamRegex)];
+  /**
+   * 检查用户名是否已存在
+   * @param username 用户名
+   * @returns 用户名是否存在
+   */
+  async isUsernameExists(username: string): Promise<boolean> {
+    const user = await this.findOne({ username });
+    return !!user;
+  }
 
-        if (matches.length > 0) {
-          // 收集所有参数名
-          const paramNames = matches.map((match) => match[1]);
+  /**
+   * 复杂查询示例：分页查询用户列表（模糊查询）
+   * @param params 查询参数
+   * @returns 查询结果
+   */
+  async searchUsers(params: {
+    keyword?: string;
+    status?: number;
+    deptId?: string;
+    pageNum?: number;
+    pageSize?: number;
+  }) {
+    const { keyword, status, deptId, pageNum = 1, pageSize = 10 } = params;
 
-          // 替换SQL中的命名参数为问号占位符
-          processedSql = querySql.replace(namedParamRegex, '?');
+    // 构建查询条件
+    let conditionLambda = 'u.isRemoved = :isRemoved';
+    const conditionValue: Record<string, any> = { isRemoved: false };
 
-          // 按顺序提取参数值
-          paramNames.forEach((name) => {
-            if (name in parameters) {
-              paramValues.push(parameters[name]);
-            } else {
-              throw new Error(`缺少SQL参数: ${name}`);
-            }
-          });
-        }
-      }
-
-      // 执行查询
-      return this.repository.query(processedSql, paramValues);
-    } catch (error) {
-      // 错误处理
-      console.error(`SQL执行错误: ${error.message}`, {
-        sql: querySql,
-        params: parameters,
-      });
-      throw error;
+    if (keyword) {
+      conditionLambda +=
+        ' AND (u.username LIKE :keyword OR u.realName LIKE :keyword OR u.mobile LIKE :keyword)';
+      conditionValue.keyword = `%${keyword}%`;
     }
+
+    if (status !== undefined) {
+      conditionLambda += ' AND u.status = :status';
+      conditionValue.status = status;
+    }
+
+    if (deptId) {
+      conditionLambda += ' AND u.deptId = :deptId';
+      conditionValue.deptId = deptId;
+    }
+
+    // 使用findManyBase方法执行查询
+    return this.findManyBase({
+      tableName: 'u',
+      select: [
+        'u.id',
+        'u.username',
+        'u.realName',
+        'u.email',
+        'u.mobile',
+        'u.avatar',
+        'u.status',
+        'u.deptId',
+        'u.lastLoginTime',
+        'u.createdAt',
+        'u.creatorName',
+      ],
+      conditionLambda,
+      conditionValue,
+      orderBy: { 'u.createdAt': 'DESC' },
+      take: pageSize,
+      skip: (pageNum - 1) * pageSize,
+    });
   }
 }

@@ -1,20 +1,31 @@
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { UserRepository } from './user.repository';
+import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
-import { registerEntity } from '@cs/nest-typeorm';
-
-// 注册用户实体到test连接
-registerEntity('test', UserEntity);
-
+import { UserRepository } from './user.repository';
+import { RegistModule, CustomRepository } from '@cs/nest-typeorm';
+import { RoleEntity } from './role.entity';
+import { ProductEntity } from './product.entity';
 @Module({
-  providers: [
-    // 提供用户仓库和服务
-    UserRepository,
-    UserService,
+  imports: [
+    RegistModule.forRepositories([
+      {
+        entity: UserEntity,
+        repository: UserRepository,
+        connectionName: 'test',
+      },
+      {
+        entity: ProductEntity,
+        connectionName: 'test',
+      },
+      {
+        entity: RoleEntity,
+        connectionName: 'test1',
+      },
+    ]),
   ],
   controllers: [UserController],
+  providers: [UserService],
   exports: [UserService],
 })
 export class UserModule {}

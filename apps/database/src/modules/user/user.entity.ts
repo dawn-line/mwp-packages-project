@@ -1,10 +1,7 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
-import { HasPrimaryFullEntity, registerEntity } from '@cs/nest-typeorm';
+import { Entity, Column } from 'typeorm';
+import { registerEntity, HasPrimaryFullEntity } from '@cs/nest-typeorm';
 
-@Entity({
-  name: 'user',
-  comment: '用户表',
-})
+@Entity('sys_user')
 export class UserEntity extends HasPrimaryFullEntity {
   @Column({
     name: 'username',
@@ -12,6 +9,7 @@ export class UserEntity extends HasPrimaryFullEntity {
     type: 'varchar',
     length: 50,
     nullable: false,
+    unique: false,
   })
   username: string;
 
@@ -34,22 +32,57 @@ export class UserEntity extends HasPrimaryFullEntity {
   email: string;
 
   @Column({
-    name: 'phone',
+    name: 'mobile',
     comment: '手机号',
     type: 'varchar',
     length: 20,
     nullable: true,
   })
-  phone: string;
+  mobile: string;
+
+  @Column({
+    name: 'real_name',
+    comment: '真实姓名',
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  realName: string;
+
+  @Column({
+    name: 'avatar',
+    comment: '头像URL',
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+  })
+  avatar: string;
 
   @Column({
     name: 'status',
-    comment: '状态: 1-正常, 0-禁用',
+    comment: '状态：0-禁用，1-正常',
     type: 'tinyint',
     default: 1,
     nullable: true,
   })
   status: number;
+
+  @Column({
+    name: 'dept_id',
+    comment: '部门ID',
+    type: 'bigint',
+    nullable: true,
+  })
+  deptId: string;
+
+  @Column({
+    name: 'last_login_time',
+    comment: '最后登录时间',
+    type: 'datetime',
+    nullable: true,
+  })
+  lastLoginTime: Date;
 }
-// 注册实体到 test 数据库连接
-// registerEntity('test', User);
+
+// 注册用户实体到默认连接
+registerEntity('test', UserEntity);

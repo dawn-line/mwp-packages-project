@@ -17,8 +17,7 @@ export abstract class BaseEntity {
   @Column({
     name: 'creator_id',
     comment: '创建用户主键',
-    type: 'varchar',
-    length: 50,
+    type: 'bigint',
     nullable: true,
   })
   creatorId: string;
@@ -40,8 +39,7 @@ export abstract class BaseEntity {
   @Column({
     name: 'modifier_id',
     comment: '修改用户主键',
-    type: 'varchar',
-    length: 50,
+    type: 'bigint',
     nullable: true,
   })
   modifierId: string;
@@ -68,14 +66,9 @@ export abstract class BaseEntity {
     nullable: true,
   })
   version: number;
-
+  @BeforeInsert()
   @BeforeUpdate()
   updateVersionTimestamp() {
-    this.version = Date.now();
-  }
-
-  @BeforeInsert()
-  setInitialVersion() {
     this.version = Date.now();
   }
 }

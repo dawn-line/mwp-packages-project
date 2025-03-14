@@ -54,12 +54,15 @@ let DatabaseModule = DatabaseModule_1 = class DatabaseModule {
                 {
                     provide: database_constants_1.DATABASE_CONNECTIONS,
                     useFactory: async (dbOptions) => {
+                        const configWithEntities = {};
                         for (const key in dbOptions) {
-                            const element = dbOptions[key];
-                            element.entities = (0, entity_registry_1.getRegisteredEntities)(key);
-                            element.name = key;
+                            configWithEntities[key] = {
+                                ...dbOptions[key],
+                                entities: (0, entity_registry_1.getRegisteredEntities)(key),
+                                name: key,
+                            };
                         }
-                        return await this.createConnections(dbOptions);
+                        return await this.createConnections(configWithEntities);
                     },
                     inject: [database_constants_1.DATABASE_MODULE_OPTIONS],
                 },
@@ -83,12 +86,15 @@ let DatabaseModule = DatabaseModule_1 = class DatabaseModule {
         return {
             provide: database_constants_1.DATABASE_CONNECTIONS,
             useFactory: async () => {
+                const configWithEntities = {};
                 for (const key in options) {
-                    const element = options[key];
-                    element.entities = (0, entity_registry_1.getRegisteredEntities)(key);
-                    element.name = key;
+                    configWithEntities[key] = {
+                        ...options[key],
+                        entities: (0, entity_registry_1.getRegisteredEntities)(key),
+                        name: key,
+                    };
                 }
-                return await this.createConnections(options);
+                return await this.createConnections(configWithEntities);
             },
         };
     }

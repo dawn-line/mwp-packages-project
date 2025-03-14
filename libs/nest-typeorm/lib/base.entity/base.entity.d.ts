@@ -8,6 +8,5 @@ export declare abstract class BaseEntity {
     isRemoved: boolean;
     version: number;
     updateVersionTimestamp(): void;
-    setInitialVersion(): void;
 }
 //# sourceMappingURL=base.entity.d.ts.map

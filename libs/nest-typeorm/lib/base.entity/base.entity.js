@@ -15,9 +15,6 @@ class BaseEntity {
     updateVersionTimestamp() {
         this.version = Date.now();
     }
-    setInitialVersion() {
-        this.version = Date.now();
-    }
 }
 exports.BaseEntity = BaseEntity;
 __decorate([
@@ -33,8 +30,7 @@ __decorate([
     (0, typeorm_1.Column)({
         name: 'creator_id',
         comment: '创建用户主键',
-        type: 'varchar',
-        length: 50,
+        type: 'bigint',
         nullable: true,
     }),
     __metadata("design:type", String)
@@ -62,8 +58,7 @@ __decorate([
     (0, typeorm_1.Column)({
         name: 'modifier_id',
         comment: '修改用户主键',
-        type: 'varchar',
-        length: 50,
+        type: 'bigint',
         nullable: true,
     }),
     __metadata("design:type", String)
@@ -98,15 +93,10 @@ __decorate([
     __metadata("design:type", Number)
 ], BaseEntity.prototype, "version", void 0);
 __decorate([
+    (0, typeorm_1.BeforeInsert)(),
     (0, typeorm_1.BeforeUpdate)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], BaseEntity.prototype, "updateVersionTimestamp", null);
-__decorate([
-    (0, typeorm_1.BeforeInsert)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], BaseEntity.prototype, "setInitialVersion", null);
 //# sourceMappingURL=base.entity.js.map

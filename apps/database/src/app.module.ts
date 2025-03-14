@@ -3,8 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ShareModule } from './share.moudle';
 import { UserModule } from './modules/user/user.module';
-import { UserEntity } from './modules/user/user.entity';
-
 @Module({
   imports: [ShareModule, UserModule],
   controllers: [AppController],
